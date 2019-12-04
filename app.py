@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
 from main import create_app
 from models import event
-from datetime import datetime, timedelta, time
+from datetime import date, timedelta, time
 import json
 
 app = create_app()
+
 
 # fake_data = [
 #     {
@@ -26,19 +27,24 @@ app = create_app()
 @app.route('/events/<years>/<months>/<days>', methods=['GET'])
 def get_events(years, months, days):
   event_data = event.query.all()
-  urlDate = datetime(int(years), int(months), int(days))
-  searchEndDate = urlDate - timedelta(days=-7)
-  # urlDate_String = datetime.strftime(urlDate, '%Y%m%dT%H%M')
-  # SearchEnd_String = datetime.strftime(searchEndDate, '%Y%m%dT%H%M')
+  urlDate = date(int(years), int(months), int(days))
+  searchEndDate = urlDate - timedelta(days=+7)
 
   for data in event_data:
-    start_date = datetime.strptime(data['start_date'], "%Y-%m-%d")
-    end_date = datetime.strptime(data['end_date'], "%Y-%m-%d")
-    if searchEndDate >= start_date and urlDate < end_date:
-      return jsonify(data)
+    # start_date = datetime.strptime(data['start_date'], "%Y-%m-%d")
+    # end_date = datetime.strptime(data['end_date'], "%Y-%m-%d")
+    start = data.start_date
+    end = data.end_date
+    if searchEndDate > start and urlDate <= end:
+      result = {
+        "start":start,
+        "end":end,
+        "title":data.title
+      }
+      return result
     else:
       return 'No data'
-
+  
 if __name__ == '__main__':
   app.run(port='5002', debug=True)
 

@@ -12,7 +12,6 @@ lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mysqlclient==1.4.6
-powerline-status===2.7.dev9999-git.b-5d82d544f3366a214732aeb8f781d50ced38ceef-
 pylint==2.4.4
 PyMySQL==0.9.3
 pytz==2019.3
