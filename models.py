@@ -18,8 +18,8 @@ class event(db.Model):
   desc = db.Column(db.String, nullable=False)
   
   created_at = db.Column(db.DateTime, default=datetime.now)
-  start_date = db.Column(db.DateTime, nullable=False)
-  end_date = db.Column(db.DateTime, nullable=False)
+  start_date = db.Column(db.Date, nullable=False)
+  end_date = db.Column(db.Date, nullable=False)
   display_date = db.Column(db.String, nullable=False)
 
   location = db.Column(db.String, nullable=False)
