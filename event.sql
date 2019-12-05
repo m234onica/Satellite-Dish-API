@@ -21,8 +21,7 @@ USE testDB;
 INSERT INTO events
   (
   img,
-
-le,
+  title,
   link,
   `desc`,
   start_date,
@@ -44,8 +43,8 @@ VALUES
   "2019-12-10",
   "11/20（一）、11/30（一）、12/5 （一）",
   "新光三越 台北信義新天地(台北市台北市信義區松高路19號)",
-  "market",
+  "theater",
   "投稿人姓名",
   "linroex@coder.tw",
-  "0930330425"
+  "0930330426"
   );

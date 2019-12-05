@@ -44,3 +44,21 @@ class event(db.Model):
     self.reporter_name = reporter_name
     self.reporter_email = reporter_email
     self.reporter_phone = reporter_phone
+
+  def __repr__(self):
+        return "Events('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+            self.img,
+            self.title,
+            self.link,
+            self.desc,
+            self.created_at,
+            self.start_date,
+            self.end_date,
+            self.display_date,
+            self.location,
+            self.note,
+            self.category,
+            self.reporter_name,
+            self.reporter_email,
+            self.reporter_phone
+        )

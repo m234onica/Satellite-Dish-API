@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from main import create_app
 from models import event
 from datetime import date, timedelta, time
-import json
+import codecs
 
 app = create_app()
 
@@ -24,28 +24,53 @@ app = create_app()
 # ]
 
 
-@app.route('/events/<years>/<months>/<days>', methods=['GET'])
-def get_events(years, months, days):
-  event_data = event.query.all()
-  urlDate = date(int(years), int(months), int(days))
-  searchEndDate = urlDate - timedelta(days=+7)
+@app.route('/events/<categories>/<years>/<months>/<days>', methods=['GET'])
+def get_events(categories, years, months, days):
+    event_data = event.query.filter_by(category=categories).all()
+    
+    print(event_data)
+    
 
-  for data in event_data:
-    # start_date = datetime.strptime(data['start_date'], "%Y-%m-%d")
-    # end_date = datetime.strptime(data['end_date'], "%Y-%m-%d")
-    start = data.start_date
-    end = data.end_date
-    if searchEndDate > start and urlDate <= end:
-      result = {
-        "start":start,
-        "end":end,
-        "title":data.title
-      }
-      return result
-    else:
-      return 'No data'
-  
+    urlDate = date(int(years), int(months), int(days))
+    searchEndDate = urlDate - timedelta(days=-7)
+    searchDatesRange = []
+
+    while urlDate < searchEndDate:
+      searchDatesRange.append(urlDate)
+      urlDate += timedelta(days=1)
+    searchDatesRange.append(searchEndDate)
+    
+
+    for data in event_data:
+      dateRange = []
+      start = data.start_date
+      end = data.end_date
+
+      while start < end:
+        dateRange.append(start)
+        start += timedelta(days=1)
+      dateRange.append(end)
+      for dateItem in dateRange:
+        if dateItem in searchDatesRange:
+          result = [
+            {
+              "img": data.img,
+              "title": data.title,
+              "date":{
+                  "start": data.start_date,
+                  "end": data.end_date,
+              },
+              "display_date": data.display_date,
+              "address": data.location,
+              "link": data.link,
+              "desc": data.desc
+            }
+          ]
+          return jsonify(result)
+      else:
+        return 'No data'
+      
+
+
 if __name__ == '__main__':
-  app.run(port='5002', debug=True)
-
-
+    app.run(port='5002', debug=True)
