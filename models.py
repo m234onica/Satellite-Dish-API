@@ -9,7 +9,7 @@ class category_Enum(enum.Enum):
     market = 2
     theater = 3
 
-class event(db.Model):
+class Event(db.Model):
   __tablename__ = 'events'
   id = db.Column(db.Integer, primary_key=True)
   img = db.Column(db.String(100), nullable=False)
@@ -22,6 +22,7 @@ class event(db.Model):
   end_date = db.Column(db.Date, nullable=False)
   display_date = db.Column(db.String, nullable=False)
 
+  region = db.Column(db.String, nullable=True)
   location = db.Column(db.String, nullable=False)
   note = db.Column(db.String, nullable=True)
   category = db.Column(db.Enum(category_Enum), nullable=False)

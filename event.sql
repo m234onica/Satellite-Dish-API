@@ -15,6 +15,7 @@ USE testDB;
 --   reporter_name   VARCHAR(20)   NOT NULL,
 --   reporter_email  VARCHAR(50)   NOT NULL,
 --   reporter_phone  VARCHAR(20)   NOT NULL    UNIQUE,
+--   region VARCHAR(10),
 --   PRIMARY KEY( id )
 -- );
 
@@ -31,20 +32,22 @@ INSERT INTO events
   category,
   reporter_name,
   reporter_email,
-  reporter_phone
+  reporter_phone,
+  region
   )
 VALUES
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
-  "8Urban Nomad Freakout Music Fest | 2019 遊牧怪奇音樂祭",
+  "9Urban Nomad Freakout Music Fest | 2019 遊牧怪奇音樂祭",
   "https://accupass",
-  "8氣可價著高告別，了進個假時雖父馬算水：那省線山兒飛了：樣個不不縣有用。三或物不好媽蘭車者不能於了日去因公流平斯作研車火整委評金……的計規今應取事白相萬日香微支還味說精文地友位一記灣業常品喜初？化現愛們點這苦。數府是底稱子現玩園然，此成專定聞",
+  "9氣可價著高告別，了進個假時雖父馬算水：那省線山兒飛了：樣個不不縣有用。三或物不好媽蘭車者不能於了日去因公流平斯作研車火整委評金……的計規今應取事白相萬日香微支還味說精文地友位一記灣業常品喜初？化現愛們點這苦。數府是底稱子現玩園然，此成專定聞",
   "2019-10-01",
   "2019-11-10",
-  "8 11/20（一）、11/30（一）、12/5 （一）",
-  "8 新光三越 台北信義新天地(台北市台北市信義區松高路19號)",
+  "9 11/20（一）、11/30（一）、12/5 （一）",
+  "9 新光三越 台北信義新天地(台北市台北市信義區松高路19號)",
   "visual_art",
   "投稿人姓名",
   "linroex@coder.tw",
-  "0930330429"
+  "0930330430",
+  "北部"
   );

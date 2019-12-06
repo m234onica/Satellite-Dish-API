@@ -1,64 +1,85 @@
 from flask import Flask, request, jsonify, json
-from main import create_app, db_session
+from main import create_app, db
 from sqlalchemy import or_
-from models import event
-from datetime import date, timedelta, time
+from models import Event
+from datetime import date, timedelta, datetime
 import ast
 
 app = create_app()
 
-@app.route('/api/events/<categories>/<years>/<months>/<days>', methods=['GET'])
-def get_events(categories, years, months, days):
-  
-  urlDate = date(int(years), int(months), int(days))
-  searchEndDate = urlDate - timedelta(days=-7)
-  
-  event_data = event.query.filter_by(category=categories).\
-      filter(~(or_(event.end_date < urlDate, event.start_date > searchEndDate))).\
-      with_entities(
-        event.img, 
-        event.link, 
-        event.title, 
-        event.start_date, 
-        event.end_date, 
-        event.location, 
-        event.desc, 
-        event.display_date).\
-      all()
-  # print(event_data)
-  
-  if not event_data:
-    return 'No data'
+@app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
+def get_events(category, year, month, day):
+  result = []
+  url_start_date = date(year, month, day)
+  url_end_date = url_start_date + timedelta(days=7)
 
-  list = [dict(zip(result.keys(), result)) for result in event_data]
-  return jsonify(list)
+  events = Event.query.\
+      filter_by(category=category).\
+      filter(~(or_(Event.end_date < url_start_date, Event.start_date > url_end_date))).\
+      all()
+
+  if not events:
+    return 'No data'
+  
+  for event in events:
+    data = {
+        "img": event.img,
+        "title": event.title,
+        "region": event.region,
+        "date": {
+            "start": event.start_date.strftime("%Y-%m-%d"),
+            "end": event.end_date.strftime("%Y-%m-%d"),
+        },
+        "display_date": event.display_date,
+        "address": event.location,
+        "link": event.link,
+        "desc": event.desc
+      }
+    result.append(data)
+  return jsonify(result)
+
 
 @app.route('/api/banner', methods=['GET'])
 def get_all_banner():
-  all_banner = event.query.with_entities(
-      event.img,
-      event.id,
-      event.title,
-      event.location,
-      event.desc,
-      event.display_date).all()
-  print(all_banner)
-  list = [dict(zip(result.keys(), result)) for result in all_banner]
-  return jsonify(list)
   
+  result = []
+  all_banners = Event.query.all()
 
-@app.route('/api/<categories>/banner', methods=['GET'])
-def get_banner(categories):
-  event_banner = event.query.filter_by(category=categories).with_entities(
-      event.img,
-      event.id,
-      event.title,
-      event.location,
-      event.desc,
-      event.display_date).all()
-  print(event_banner)
-  list = [dict(zip(result.keys(), result)) for result in event_banner]
-  return jsonify(list)
-  
+  if not all_banners:
+    return 'No data'
+
+  for banner in all_banners:
+    data = {
+      "index": banner.id,
+      "img": banner.img,
+      "title": banner.title,
+      "display_date": banner.display_date,
+      "address": banner.location,
+      "desc": banner.desc
+      }
+    result.append(data)
+  return jsonify(result)
+
+@app.route('/api/<category>/banner', methods=['GET'])
+def get_banner(category):
+  result = []
+  event_banners = Event.query.filter_by(category=category).all()
+
+  if not event_banners:
+    return 'No data'
+
+  for banner in event_banners:
+    data = {
+      "index": banner.id,
+      "img": banner.img,
+      "title": banner.title,
+      "display_date": banner.display_date,
+      "address": banner.location,
+      "desc": banner.desc
+      }
+    result.append(data)
+  print(result)
+  return jsonify(result)
+
 if __name__ == '__main__':
     app.run(port='5002', debug=True)
