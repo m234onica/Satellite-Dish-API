@@ -1,30 +1,36 @@
 from flask import Flask, request, jsonify, json
 from main import create_app, db
 from sqlalchemy import or_
-from models import Event
+from models import Event, category_Enum
 from datetime import date, timedelta, datetime
-import ast
+from config import db_category
 
 app = create_app()
 
 
 @app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def get_events(category, year, month, day):
-  result = []
-  url_start_date = date(year, month, day)
-  url_end_date = url_start_date + timedelta(days=7)
 
-  events = Event.query.\
-      filter_by(category=category).\
-      filter(~(Event.end_date < url_start_date)).\
-      filter(~(Event.start_date > url_end_date)).\
-      all()
+  if category not in db_category:
+    return 'Category is not found.', 404
+  try:
+    url_start_date = date(year, month, day)
+  except: 
+    return 'The date is not correct.', 404
+  else:  
+    result = []
+    url_end_date = url_start_date + timedelta(days=7)
+    events = Event.query.\
+        filter_by(category=category).\
+        filter(~(Event.end_date < url_start_date)).\
+        filter(~(Event.start_date > url_end_date)).\
+        all()
 
-  if not events:
-    return 'No data'
-  
-  for event in events:
-    data = {
+    if not events:
+      return 'No data'
+    
+    for event in events:
+      data = {
         "img": event.img,
         "title": event.title,
         "region": event.region,
@@ -37,8 +43,8 @@ def get_events(category, year, month, day):
         "link": event.link,
         "desc": event.desc
       }
-    result.append(data)
-  return jsonify(result)
+      result.append(data)
+    return jsonify(result)
 
 
 @app.route('/api/banner', methods=['GET'])
@@ -58,13 +64,17 @@ def get_all_banner():
       "display_date": banner.display_date,
       "address": banner.location,
       "desc": banner.desc
-      }
+    }
     result.append(data)
   return jsonify(result)
 
 
 @app.route('/api/<category>/banner', methods=['GET'])
 def get_banner(category):
+   
+  if category not in db_category:
+    return 'Category is not found.', 404
+
   result = []
   event_banners = Event.query.filter_by(category=category).all()
 
@@ -79,7 +89,7 @@ def get_banner(category):
       "display_date": banner.display_date,
       "address": banner.location,
       "desc": banner.desc
-      }
+    }
     result.append(data)
   return jsonify(result)
 

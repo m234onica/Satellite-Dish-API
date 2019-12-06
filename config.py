@@ -9,3 +9,5 @@ class Config:
   SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:rootroot@localhost/testDB'
   JSON_AS_ASCII = False
   SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+db_category = ['music', 'visual_art', 'market', 'theater']
