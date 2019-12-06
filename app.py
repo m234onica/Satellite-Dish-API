@@ -13,38 +13,39 @@ def get_events(category, year, month, day):
 
   if category not in db_category:
     return 'Category is not found.', 404
+  
   try:
     url_start_date = date(year, month, day)
-  except: 
+  except ValueError as n:
+    print(n)
     return 'The date is not correct.', 404
-  else:  
-    result = []
-    url_end_date = url_start_date + timedelta(days=7)
-    events = Event.query.\
-        filter_by(category=category).\
-        filter(~(Event.end_date < url_start_date)).\
-        filter(~(Event.start_date > url_end_date)).\
-        all()
+  result = []
+  url_end_date = url_start_date + timedelta(days=7)
+  events = Event.query.\
+      filter_by(category=category).\
+      filter(~(Event.end_date < url_start_date)).\
+      filter(~(Event.start_date > url_end_date)).\
+      all()
 
-    if not events:
-      return 'No data'
-    
-    for event in events:
-      data = {
-        "img": event.img,
-        "title": event.title,
-        "region": event.region,
-        "date": {
-            "start": event.start_date.strftime("%Y-%m-%d"),
-            "end": event.end_date.strftime("%Y-%m-%d"),
-        },
-        "display_date": event.display_date,
-        "address": event.location,
-        "link": event.link,
-        "desc": event.desc
-      }
-      result.append(data)
-    return jsonify(result)
+  if not events:
+    return 'No data'
+  
+  for event in events:
+    data = {
+      "img": event.img,
+      "title": event.title,
+      "region": event.region,
+      "date": {
+          "start": event.start_date.strftime("%Y-%m-%d"),
+          "end": event.end_date.strftime("%Y-%m-%d"),
+      },
+      "display_date": event.display_date,
+      "address": event.location,
+      "link": event.link,
+      "desc": event.desc
+    }
+    result.append(data)
+  return jsonify(result)
 
 
 @app.route('/api/banner', methods=['GET'])
