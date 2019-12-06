@@ -7,6 +7,7 @@ import ast
 
 app = create_app()
 
+
 @app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def get_events(category, year, month, day):
   result = []
@@ -15,7 +16,8 @@ def get_events(category, year, month, day):
 
   events = Event.query.\
       filter_by(category=category).\
-      filter(~(or_(Event.end_date < url_start_date, Event.start_date > url_end_date))).\
+      filter(~(Event.end_date < url_start_date)).\
+      filter(~(Event.start_date > url_end_date)).\
       all()
 
   if not events:
@@ -60,6 +62,7 @@ def get_all_banner():
     result.append(data)
   return jsonify(result)
 
+
 @app.route('/api/<category>/banner', methods=['GET'])
 def get_banner(category):
   result = []
@@ -78,7 +81,6 @@ def get_banner(category):
       "desc": banner.desc
       }
     result.append(data)
-  print(result)
   return jsonify(result)
 
 if __name__ == '__main__':
