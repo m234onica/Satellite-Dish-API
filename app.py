@@ -103,7 +103,8 @@ def get_banner(category):
   return jsonify(result)
 
 
-def decode_and_upload_file(src):
+def decode_and_upload_file(src, id):
+  event_id = Event.query.filter_by(id=id).first()
   result = re.search(
       "data:image/(?P<ext>.*?);base64,(?P<data>.*)", src, re.DOTALL)
   if result:
@@ -115,7 +116,7 @@ def decode_and_upload_file(src):
 
   if ext in ALLOWED_EXTENSIONS:
     img = base64.urlsafe_b64decode(data)
-    filename = "{}.{}".format(uuid.uuid4(), ext)
+    filename = "{}.{}".format(event_id, ext)
 
     public_url = upload_file(img, filename, "image/"+ext)
     return public_url
@@ -127,24 +128,29 @@ def create_event():
 
   if request.method == 'POST':
     new_event = Event(
-          title=request.json['title'],
-          img=decode_and_upload_file(request.json['img']),
-          category=request.json['category'], 
-          link=request.json['link'],
-          created_at=datetime.now(),
-          desc=request.json['desc'], 
-          region=request.json['region'],
-          start_date=request.json['start_date'], 
-          end_date=request.json['end_date'],
-          display_date=request.json['display_date'], 
-          location=request.json['location'],
-          note=request.json['note'], 
-          reporter_name=request.json['reporter_name'],
-          reporter_email=request.json['reporter_email'],
-          reporter_phone=request.json['reporter_phone'],
-          )
+      title=request.json['title'],
+      category=request.json['category'],
+      img=request.json['img'], 
+      link=request.json['link'],
+      created_at=datetime.now(),
+      desc=request.json['desc'], 
+      region=request.json['region'],
+      start_date=request.json['start_date'], 
+      end_date=request.json['end_date'],
+      display_date=request.json['display_date'], 
+      location=request.json['location'],
+      note=request.json['note'], 
+      reporter_name=request.json['reporter_name'],
+      reporter_email=request.json['reporter_email'],
+      reporter_phone=request.json['reporter_phone'],
+      )
     
     db.session.add(new_event)
+    db.session.commit()
+    
+    new_event = Event.query.filter_by(id=new_event.id).update (
+      img=decode_and_upload_file(request.json['img'], new_event.id)
+    )
     db.session.commit()
 
     return 'Saved to the datanase!' 

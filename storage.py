@@ -1,8 +1,5 @@
 from config import BUCKET_NAME
 from google.cloud import storage
-import six
-
-
 
 def upload_file(file_stream, filename, content_type):
     
@@ -17,8 +14,5 @@ def upload_file(file_stream, filename, content_type):
         content_type=content_type)
 
     url = blob.public_url
-
-    if isinstance(url, six.binary_type):
-        url = url.decode('utf-8')
 
     return url
