@@ -7,7 +7,11 @@ class Config:
   FLASK_DEBUG = True
 
   SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:rootroot@localhost/testDB'
-  JSON_AS_ASCII = False
   SQLALCHEMY_TRACK_MODIFICATIONS = True
+  JSON_AS_ASCII = False
 
-db_category = ['music', 'visual_art', 'market', 'theater']
+# PROJECT_ID = 'momoka-244303'
+BUCKET_NAME = 'satellite-l5yx88bg3'
+
+CATEGORY_DB = ['music', 'visual_art', 'market', 'theater']
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

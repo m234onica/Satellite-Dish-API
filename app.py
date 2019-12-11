@@ -1,9 +1,16 @@
-from flask import Flask, request, jsonify, json
-from main import create_app, db
-from sqlalchemy import or_
-from models import Event, category_Enum
+from flask import Flask, request, jsonify, render_template, current_app
 from datetime import date, timedelta, datetime
-from config import db_category
+
+from models import Event, category_Enum, File
+from config import CATEGORY_DB, ALLOWED_EXTENSIONS
+from init import create_app, db
+from storage import upload_file
+
+import base64
+import uuid
+import re
+import os
+import json
 
 app = create_app()
 
@@ -11,7 +18,7 @@ app = create_app()
 @app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def get_events(category, year, month, day):
 
-  if category not in db_category:
+  if category not in CATEGORY_DB:
     return 'Category is not found.', 404
   
   try:
@@ -19,6 +26,7 @@ def get_events(category, year, month, day):
   except ValueError as n:
     print(n)
     return 'The date is not correct.', 404
+
   result = []
   url_end_date = url_start_date + timedelta(days=7)
   events = Event.query.\
@@ -73,7 +81,7 @@ def get_all_banner():
 @app.route('/api/<category>/banner', methods=['GET'])
 def get_banner(category):
    
-  if category not in db_category:
+  if category not in CATEGORY_DB:
     return 'Category is not found.', 404
 
   result = []
@@ -93,6 +101,55 @@ def get_banner(category):
     }
     result.append(data)
   return jsonify(result)
+
+
+def decode_and_upload_file(src):
+  result = re.search(
+      "data:image/(?P<ext>.*?);base64,(?P<data>.*)", src, re.DOTALL)
+  if result:
+    ext = result.groupdict().get("ext")
+    data = result.groupdict().get("data")
+
+  else:
+    raise Exception("Do not parse!")
+
+  if ext in ALLOWED_EXTENSIONS:
+    img = base64.urlsafe_b64decode(data)
+    filename = "{}.{}".format(uuid.uuid4(), ext)
+
+    public_url = upload_file(img, filename, "image/"+ext)
+    return public_url
+  else:
+    return "Wrong file type."
+
+@app.route('/api/event', methods=['GET', 'POST'])
+def create_event():
+
+  if request.method == 'POST':
+
+    new_event = Event(
+          title=request.json['title'],
+          img=decode_and_upload_file(request.json['img']),
+          category=request.json['category'], 
+          link=request.json['link'],
+          created_at=datetime.now(),
+          desc=request.json['desc'], 
+          region=request.json['region'],
+          start_date=request.json['start_date'], 
+          end_date=request.json['end_date'],
+          display_date=request.json['display_date'], 
+          location=request.json['location'],
+          note=request.json['note'], 
+          reporter_name=request.json['reporter_name'],
+          reporter_email=request.json['reporter_email'],
+          reporter_phone=request.json['reporter_phone'],
+          )
+    
+    db.session.add(new_event)
+    db.session.commit()
+
+    return 'Saved to the datanase!' + jsonify(new_event)
+
 
 if __name__ == '__main__':
     app.run(port='5002', debug=True)
