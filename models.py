@@ -12,8 +12,7 @@ class category_Enum(enum.Enum):
 class Event(db.Model):
   __tablename__ = 'events'
   id = db.Column(db.Integer, primary_key=True)
-  # img = db.Column(db.String(100), nullable=False)
-  img = db.Column(db.LargeBinary)
+  img = db.Column(db.String(100), nullable=False)
   title = db.Column(db.String(50), nullable=False)
   link = db.Column(db.String(100), nullable=False)
   desc = db.Column(db.String, nullable=False)

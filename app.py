@@ -126,7 +126,6 @@ def decode_and_upload_file(src):
 def create_event():
 
   if request.method == 'POST':
-
     new_event = Event(
           title=request.json['title'],
           img=decode_and_upload_file(request.json['img']),
@@ -148,7 +147,8 @@ def create_event():
     db.session.add(new_event)
     db.session.commit()
 
-    return 'Saved to the datanase!' + jsonify(new_event)
+    return 'Saved to the datanase!' 
+    #+ jsonify(new_event)
 
 
 if __name__ == '__main__':
