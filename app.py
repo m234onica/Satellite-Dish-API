@@ -1,16 +1,10 @@
 from flask import Flask, request, jsonify, render_template, current_app
 from datetime import date, timedelta, datetime
 
-from models import Event, category_Enum, File
-from config import CATEGORY_DB, ALLOWED_EXTENSIONS
 from init import create_app, db
-from storage import upload_file
-
-import base64
-import uuid
-import re
-import os
-import json
+from config import CATEGORY_DB, ALLOWED_EXTENSIONS
+from models import Event, category_Enum, File
+from storage import decode_and_get_url
 
 app = create_app()
 
@@ -31,12 +25,9 @@ def get_events(category, year, month, day):
   url_end_date = url_start_date + timedelta(days=7)
   events = Event.query.\
       filter_by(category=category).\
-      filter(~(Event.end_date < url_start_date)).\
-      filter(~(Event.start_date > url_end_date)).\
+      filter(Event.end_date >= url_start_date).\
+      filter(Event.start_date <= url_end_date).\
       all()
-
-  if not events:
-    return 'No data'
   
   for event in events:
     data = {
@@ -44,8 +35,8 @@ def get_events(category, year, month, day):
       "title": event.title,
       "region": event.region,
       "date": {
-          "start": event.start_date.strftime("%Y-%m-%d"),
-          "end": event.end_date.strftime("%Y-%m-%d"),
+          "start": event.start_date,
+          "end": event.end_date,
       },
       "display_date": event.display_date,
       "address": event.location,
@@ -61,9 +52,6 @@ def get_all_banner():
   
   result = []
   all_banners = Event.query.all()
-
-  if not all_banners:
-    return 'No data'
 
   for banner in all_banners:
     data = {
@@ -87,9 +75,6 @@ def get_banner(category):
   result = []
   event_banners = Event.query.filter_by(category=category).all()
 
-  if not event_banners:
-    return 'No data'
-
   for banner in event_banners:
     data = {
       "index": banner.id,
@@ -101,30 +86,6 @@ def get_banner(category):
     }
     result.append(data)
   return jsonify(result)
-
-
-def decode_and_upload_file(src, id):
-  if src == "":
-    public_url = None
-    return public_url
-
-  result = re.search(
-      "data:image/(?P<ext>.*?);base64,(?P<data>.*)", src, re.DOTALL)
-  if result:
-    ext = result.groupdict().get("ext")
-    data = result.groupdict().get("data")
-
-  else:
-    raise Exception("Do not parse!")
-
-  if ext in ALLOWED_EXTENSIONS:
-    img = base64.urlsafe_b64decode(data)
-    filename = "{}.{}".format(id, ext)
-
-    public_url = upload_file(img, filename, "image/"+ext)
-    return public_url
-  else:
-    return "Wrong file type."
 
 @app.route('/api/event', methods=['GET', 'POST'])
 def create_event():
@@ -152,16 +113,14 @@ def create_event():
     db.session.commit()
     
     if new_event.img == "":
-      event_img = decode_and_upload_file(
+      event_img = decode_and_get_url(
           request.json['img'], new_event.id)
 
       new_event = Event.query.filter_by(id=new_event.id).first()
       new_event.img = event_img
       db.session.commit()
 
-    return 'Saved to the datanase!' 
-    #+ jsonify(new_event)
-
+    return 'Saved to the database!'
 
 if __name__ == '__main__':
     app.run(port='5002', debug=True)
