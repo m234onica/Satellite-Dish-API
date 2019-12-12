@@ -152,7 +152,7 @@ def create_event():
     db.session.commit()
     
     if new_event.img == "":
-      event_img = img = decode_and_upload_file(
+      event_img = decode_and_upload_file(
           request.json['img'], new_event.id)
 
       new_event = Event.query.filter_by(id=new_event.id).first()
