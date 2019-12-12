@@ -104,7 +104,10 @@ def get_banner(category):
 
 
 def decode_and_upload_file(src, id):
-  event_id = Event.query.filter_by(id=id).first()
+  if src == "":
+    public_url = None
+    return public_url
+
   result = re.search(
       "data:image/(?P<ext>.*?);base64,(?P<data>.*)", src, re.DOTALL)
   if result:
@@ -116,7 +119,7 @@ def decode_and_upload_file(src, id):
 
   if ext in ALLOWED_EXTENSIONS:
     img = base64.urlsafe_b64decode(data)
-    filename = "{}.{}".format(event_id, ext)
+    filename = "{}.{}".format(id, ext)
 
     public_url = upload_file(img, filename, "image/"+ext)
     return public_url
@@ -130,7 +133,7 @@ def create_event():
     new_event = Event(
       title=request.json['title'],
       category=request.json['category'],
-      img=request.json['img'], 
+      img="",
       link=request.json['link'],
       created_at=datetime.now(),
       desc=request.json['desc'], 
@@ -148,10 +151,13 @@ def create_event():
     db.session.add(new_event)
     db.session.commit()
     
-    new_event = Event.query.filter_by(id=new_event.id).update (
-      img=decode_and_upload_file(request.json['img'], new_event.id)
-    )
-    db.session.commit()
+    if new_event.img == "":
+      event_img = img = decode_and_upload_file(
+          request.json['img'], new_event.id)
+
+      new_event = Event.query.filter_by(id=new_event.id).first()
+      new_event.img = event_img
+      db.session.commit()
 
     return 'Saved to the datanase!' 
     #+ jsonify(new_event)
