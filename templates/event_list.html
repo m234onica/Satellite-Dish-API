@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<title>Satellite Dish</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+  a.active {
+    background-color: #F1F1F1; /* Add a green color to the "active/current" link */
+    color: black;
+  }
+</style>
+
+<body>
+  <!-- Sidebar -->
+  <div class="w3-sidebar  w3-flat-midnight-blue w3-bar-block" style="width:15%">
+    <h2 class="w3-bar-item w3-padding-48">Satellite Dish</h2>
+    <a href="/" class=" w3-bar-item w3-button w3-hover-blue active" style="font-size:1.2em">Event</a>
+    <a href="banner.html" class=" w3-bar-item w3-button w3-hover-blue" style="font-size:1.2em">Banner</a>
+  </div>
+
+  <!-- Page Content -->
+  <div style="margin-left:15%">
+
+    <div class="w3-container w3-white">
+      <div class="header w3-padding-48" style="height: 100%">
+        <h1>Event List</h1>
+      </div>
+      <table id="event-list" class="w3-table w3-striped w3-hoverable w3-card-2">
+        <thead class="w3-bordered">
+          <tr class=" w3-flat-midnight-blue ">
+            <td>id</td>
+            <td>Title</td>
+            <td>Reporter Name</td>
+            <td>Email</td>
+            <td>Phone</td>
+            <td>Status</td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div id="event-detail" class="w3-modal">
+          <div class="w3-modal-content w3-animate-zoom w3-card-4">
+            <header class="w3-container w3-flat-midnight-blue">
+              <h2>Event detail page</h2>
+            </header>
+          
+          <form class="w3-container">
+            
+            <label>Index:</label><br>
+            <input class="w3-input" id="eventIndex" type="text" disabled>
+
+            <label>Title</label>
+            <input class="w3-input" id="eventTitle" type="text">
+          
+            <label>Link</label>
+            <input class="w3-input" id="eventLink" type="text">
+            
+            <label>Start Date</label>
+            <input class="w3-input" id="eventStart" type="date">
+            
+            <label>End Date</label>
+            <input class="w3-input" id="eventEnd" type="date">
+
+            <label>Display Date</label>
+            <input class="w3-input" id="eventDisplay" type="text">
+            
+          </form>
+          <div class="w3-container">
+            <button type="submit"
+                    class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-cyan w3-round w3-text-white w3-card-2">
+                    Accept
+                  </button>
+            <button type="button" 
+                    style="margin:5px;"
+                    onclick="document.getElementById('event-detail').style.display='none'"
+                    class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-grey w3-round w3-card-2">
+                    Cancel
+            </button>
+            <button type="button" 
+                    class="w3-button w3-left w3-section w3-hover-grey w3-hover-text-white w3-red w3-round w3-card-2">
+                    Reject
+            </button>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<!-- Ajax -->
+<script type=text/javascript>
+  function fetchEvents() {
+    $.ajax({
+      type: "GET",
+      url: '/api/event',
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+    }).done(function (data) {
+      const eventLists = data.map(event => {
+        return `
+              <tr>
+                <td>${event.index}</td>
+                <td>${event.title}</td>
+                <td>${event.reporter.name}</td>
+                <td>${event.reporter.email}</td>
+                <td>${event.reporter.phone}</td>
+                <td></td>
+                <td><button type="button" 
+                            class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-hover-border-cyan w3-white w3-border w3-border-blue-grey w3-round-large" 
+                            data-id="${event.index}" 
+                            onclick="document.getElementById('event-detail').style.display='block'">
+                            Detail »
+                    </button></td>
+              </tr>
+            `
+      });
+      $('#event-list tbody').html(eventLists.join(''));
+    }).fail(function (error) {
+      console.error(error)
+    })
+  }
+  fetchEvents()
+
+  $('#event-list').on('click', '.event_detail_button', e=> {
+    const eventId = e.target.dataset.id;
+    $.ajax({
+      type: "GET",
+      url:"/api/" + eventId,
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+    }).done(function (data) {
+      console.log(data[0]);
+      $('#eventIndex').val(data[0].index)
+      $('#eventTitle').val(data[0].title)
+      $('#eventLink').val(data[0].link)
+      $('#eventStart').val(data[0].date.start)
+      $('#eventEnd').val(data[0].date.end)
+      $('#eventDisplay').val(data[0].display_date)
+    })
+  })
+
+</script>
+</body>
+
+</html>

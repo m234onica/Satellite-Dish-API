@@ -1,5 +1,3 @@
 
 /.*
-test*.py
-*.png
-/templates
+/templates/banner.html
