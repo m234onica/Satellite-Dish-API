@@ -11,19 +11,23 @@
     background-color: #F1F1F1; /* Add a green color to the "active/current" link */
     color: black;
   }
+  .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>
 
 <body>
   <!-- Sidebar -->
   <div class="w3-sidebar  w3-flat-midnight-blue w3-bar-block" style="width:15%">
     <h2 class="w3-bar-item w3-padding-48">Satellite Dish</h2>
-    <a href="/" class=" w3-bar-item w3-button w3-hover-blue active" style="font-size:1.2em">Event</a>
-    <a href="banner.html" class=" w3-bar-item w3-button w3-hover-blue" style="font-size:1.2em">Banner</a>
+    <a href="/" class=" w3-bar-item w3-button w3-hover-cyan active" style="font-size:1.2em">Event</a>
+    <a href="banner.html" class=" w3-bar-item w3-button w3-hover-cyan" style="font-size:1.2em">Banner</a>
   </div>
 
   <!-- Page Content -->
   <div style="margin-left:15%">
-
     <div class="w3-container w3-white">
       <div class="header w3-padding-48" style="height: 100%">
         <h1>Event List</h1>
@@ -44,30 +48,52 @@
       </table>
 
       <div id="event-detail" class="w3-modal">
-          <div class="w3-modal-content w3-animate-zoom w3-card-4">
-            <header class="w3-container w3-flat-midnight-blue">
-              <h2>Event detail page</h2>
-            </header>
-          
-          <form class="w3-container">
-            
-            <label>Index:</label><br>
+        <div class="w3-modal-content w3-animate-zoom w3-card-4">
+          <header class="w3-container w3-flat-midnight-blue">
+            <h2>Event detail page</h2>
+          </header>
+
+          <form class="w3-container" style="padding: 10px;">
+            <img class="center" id="eventImage" src='' width="90%" /><br>
+
+            <label class="w3-text-flat-midnight-blue"><b>Index*</b></label>
             <input class="w3-input" id="eventIndex" type="text" disabled>
 
-            <label>Title</label>
+            <label class="w3-text-flat-midnight-blue"><b>Title*</b></label>
             <input class="w3-input" id="eventTitle" type="text">
           
-            <label>Link</label>
+            <label class="w3-text-flat-midnight-blue"><b>Link*</b></label>
             <input class="w3-input" id="eventLink" type="text">
             
-            <label>Start Date</label>
+            <label class="w3-text-flat-midnight-blue"><b>Start Date*</b></label>
             <input class="w3-input" id="eventStart" type="date">
             
-            <label>End Date</label>
+            <label class="w3-text-flat-midnight-blue"><b>End Date*</b></label>
             <input class="w3-input" id="eventEnd" type="date">
-
-            <label>Display Date</label>
+            
+            <label class="w3-text-flat-midnight-blue"><b>Display Date*</b></label>
             <input class="w3-input" id="eventDisplay" type="text">
+            
+            <label class="w3-text-flat-midnight-blue"><b>Note</b></label>
+            <input class="w3-input" id="eventNote" type="text">
+
+            <label class="w3-text-flat-midnight-blue"><b>Address*</b></label>
+            <input class="w3-input" id="eventAddress" type="text">
+
+            <label class="w3-text-flat-midnight-blue"><b>Description*</b></label>
+            <input class="w3-input" id="eventDesc" type="text">
+
+            <label class="w3-text-flat-midnight-blue"><b>Reporter Name*</b></label>
+            <input class="w3-input" id="eventReporterName" type="text">
+            
+            <label class="w3-text-flat-midnight-blue"><b>Reporter Email*</b></label>
+            <input class="w3-input" id="eventReporterEmail" type="text">
+            
+            <label class="w3-text-flat-midnight-blue"><b>Reporter Phone*</b></label>
+            <input class="w3-input" id="eventReporterPhone" type="text"><br>
+
+            <input class="w3-check" type="checkbox" checked="checked">
+            <label>Show on banner?</label>
             
           </form>
           <div class="w3-container">
@@ -88,13 +114,15 @@
           </div>
         </div>
       </div>
-
+    </div>
   </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<!-- Ajax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+  <!-- Ajax -->
 <script type=text/javascript>
   function fetchEvents() {
     $.ajax({
@@ -113,7 +141,7 @@
                 <td>${event.reporter.phone}</td>
                 <td></td>
                 <td><button type="button" 
-                            class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-hover-border-cyan w3-white w3-border w3-border-blue-grey w3-round-large" 
+                            class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-white w3-border w3-border-blue-grey w3-round-large w3-card-2" 
                             data-id="${event.index}" 
                             onclick="document.getElementById('event-detail').style.display='block'">
                             Detail »
@@ -129,6 +157,7 @@
   fetchEvents()
 
   $('#event-list').on('click', '.event_detail_button', e=> {
+    e.preventDefault();
     const eventId = e.target.dataset.id;
     $.ajax({
       type: "GET",
@@ -136,13 +165,19 @@
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
     }).done(function (data) {
-      console.log(data[0]);
       $('#eventIndex').val(data[0].index)
       $('#eventTitle').val(data[0].title)
       $('#eventLink').val(data[0].link)
       $('#eventStart').val(data[0].date.start)
       $('#eventEnd').val(data[0].date.end)
       $('#eventDisplay').val(data[0].display_date)
+      $('#eventNote').val(data[0].Note)
+      $('#eventAddress').val(data[0].address)
+      $('#eventDesc').val(data[0].desc)
+      $('#eventReporterName').val(data[0].reporter.name)
+      $('#eventReporterEmail').val(data[0].reporter.email)
+      $('#eventReporterPhone').val(data[0].reporter.phone)  
+      $('#eventImage').attr('src', data[0].img)
     })
   })
 

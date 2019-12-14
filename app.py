@@ -25,8 +25,8 @@ def get_each_event(id):
       # "category": event.category,
       "region": event.region,
       "date": {
-          "start": event.start_date,
-          "end": event.end_date,
+          "start": event.start_date.strftime("%Y-%m-%d"),
+          "end": event.end_date.strftime("%Y-%m-%d"),
       },
       "display_date": event.display_date,
       "note": event.note,
@@ -68,8 +68,8 @@ def get_events(category, year, month, day):
       "title": event.title,
       "region": event.region,
       "date": {
-          "start": event.start_date,
-          "end": event.end_date,
+          "start": event.start_date.strftime("%Y-%m-%d"),
+          "end": event.end_date.strftime("%Y-%m-%d"),
       },
       "display_date": event.display_date,
       "address": event.location,
@@ -166,8 +166,8 @@ def create_event():
         # "category": event.category,
         "region": event.region,
         "date": {
-            "start": event.start_date,
-            "end": event.end_date,
+            "start": event.start_date.strftime("%Y-%m-%d"),
+            "end": event.end_date.strftime("%Y-%m-%d"),
         },
         "display_date": event.display_date,
         "note": event.note,
