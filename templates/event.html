@@ -29,18 +29,34 @@
         <h1>Event List</h1>
       </div>
       <table id="event-list" class="w3-table w3-striped w3-hoverable w3-card-2">
-        <thead class="w3-bordered">
+        
           <tr class=" w3-flat-midnight-blue ">
-            <td>id</td>
-            <td>Title</td>
-            <td>Reporter Name</td>
-            <td>Email</td>
-            <td>Phone</td>
-            <td>Status</td>
-            <td></td>
+            <th>id</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Start Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th></th>
           </tr>
-        </thead>
-        <tbody></tbody>
+          {% for event in result %}
+          <tr>
+            <td>{{ event.index }}</td>
+            <td>{{ event.title }}</td>
+            <td>{{ event.category }}</td>
+            <td>{{ event.date.start }}</td>
+            <td>{{ event.desc }}</td>
+            <td>O</td>
+            <td><button type="button" 
+              class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-white w3-border w3-border-grey w3-hover-border-cyan w3-round-large w3-card-2" //
+              data-id="${event.index}"
+              onclick="document.getElementById('event-detail').style.display='block'">
+              Detail »
+              </button></td>
+          </tr>
+          {% endfor %}
+        
+        
       </table>
       
       <div id="event-detail" class="w3-modal event-detail">
@@ -121,51 +137,11 @@
 
 
 <script type=text/javascript>
-  //get_event
-  function fetchEvents() {
-  $.ajax({
-    type: "GET",
-    url: '/api/event',
-    dataType: 'json',
-    contentType: 'application/json; charset=utf-8',
-  }).done(function (data) {
-    const eventLists = data.map(event => {
-      if (event.status == false) {
-        eventStatus = 'X';
-      } else if (event.status == true) {
-        eventStatus = 'O';
-      } else {
-        eventStatus = '';
-      }
-
-      return `
-        <tr>
-        <td>${event.index}</td>
-        <td>${event.title}</td>
-        <td>${event.reporter.name}</td>
-        <td>${event.reporter.email}</td>
-        <td>${event.reporter.phone}</td>
-        <td>${eventStatus}</td>
-        <td><button type="button" 
-        class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-white w3-border w3-border-grey w3-hover-border-cyan w3-round-large w3-card-2" 
-        data-id="${event.index}" 
-        onclick="document.getElementById('event-detail').style.display='block'">
-        Detail »
-        </button></td>
-        </tr>
-        `
-    });
-    $('#event-list tbody').html(eventLists.join(''));
-  }).fail(function (error) {
-    console.error(error)
-  })
-}
-fetchEvents()
 
 //get_detail_event
 $('#event-list').on('click', '.event_detail_button', e => {
   e.preventDefault();
-  const eventId = e.target.dataset.id;
+  var eventId = e.target.dataset.id;
   console.log(eventId);
   
   $.ajax({

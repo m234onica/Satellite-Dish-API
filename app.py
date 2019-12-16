@@ -20,19 +20,48 @@ class Category(Enum):
 
 @app.route('/')
 def index():
-    return render_template('event.html')
+
+  all_events = Event.query.all()
+  result = []
+
+  for event in all_events:
+    event_category = event.category
+    data = {
+        "index": event.id,
+        "img": event.img,
+      "title": event.title,
+      "category": event_category.name,
+      "region": event.region,
+      "date": {
+          "start": event.start_date.strftime("%Y-%m-%d"),
+          "end": event.end_date.strftime("%Y-%m-%d"),
+      },
+        "display_date": event.display_date,
+      "note": event.note,
+      "address": event.location,
+      "link": event.link,
+      "desc": event.desc,
+      "reporter": {
+          "name": event.reporter_name,
+          "email": event.reporter_email,
+        "phone": event.reporter_phone
+      },
+        "status": event.status
+    }
+    result.append(data)
+  return render_template("event.html", result=result)
 
 @app.route('/api/event/<int:id>')
 def get_each_event(id):
   event = Event.query.filter_by(id=id).first()
 
   result = []
-  mem = event.category
+  event_category = event.category
   data = {
       "index": event.id,
       "img": event.img,
       "title": event.title,
-      "category": mem.name,
+      "category": event_category.name,
       "region": event.region,
       "date": {
           "start": event.start_date.strftime("%Y-%m-%d"),
@@ -168,12 +197,14 @@ def create_event():
   if request.method == 'GET':
     all_events = Event.query.all()
     result = []
+
     for event in all_events:
+      event_category = event.category
       data = {
         "index": event.id,
         "img": event.img,
         "title": event.title,
-        # "category": event.category,
+        "category": event_category.name,
         "region": event.region,
         "date": {
             "start": event.start_date.strftime("%Y-%m-%d"),
@@ -192,7 +223,7 @@ def create_event():
         "status": event.status
       }
       result.append(data)
-    return jsonify(result)      
+    return render_template("event.html", result=result)      
 
 @app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
 def eventStatus(id):
