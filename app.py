@@ -1,28 +1,38 @@
 from flask import Flask, request, jsonify, render_template, current_app
 from datetime import date, timedelta, datetime
+from enum import Enum
 
 from init import create_app, db
 from config import CATEGORY_DB, ALLOWED_EXTENSIONS
-from models import Event, category_Enum, File
+from models import Event, category_Enum
 from storage import decode_and_get_url
+
+import json
 
 app = create_app()
 
 
+class Category(Enum):
+    music = 0
+    visual_art = 1
+    market = 2
+    theater = 3
+
 @app.route('/')
 def index():
-    return render_template('event_list.html')
+    return render_template('event.html')
 
-@app.route('/api/<int:id>')
+@app.route('/api/event/<int:id>')
 def get_each_event(id):
   event = Event.query.filter_by(id=id).first()
 
   result = []
+  mem = event.category
   data = {
       "index": event.id,
       "img": event.img,
       "title": event.title,
-      # "category": event.category,
+      "category": mem.name,
       "region": event.region,
       "date": {
           "start": event.start_date.strftime("%Y-%m-%d"),
@@ -36,8 +46,9 @@ def get_each_event(id):
       "reporter": {
           "name": event.reporter_name,
           "email": event.reporter_email,
-          "phone": event.reporter_phone
-      }
+          "phone": event.reporter_phone,
+      },
+      "status": event.status
   }
   result.append(data)
   return jsonify(result)
@@ -140,17 +151,16 @@ def create_event():
       reporter_name=request.json['reporter_name'],
       reporter_email=request.json['reporter_email'],
       reporter_phone=request.json['reporter_phone'],
+      status=None,
       )
     
     db.session.add(new_event)
     db.session.commit()
     
     if new_event.img == "":
-      event_img = decode_and_get_url(
-          request.json['img'], new_event.id)
-
       new_event = Event.query.filter_by(id=new_event.id).first()
-      new_event.img = event_img
+      new_event.img = decode_and_get_url(
+          request.json['img'], new_event.id)
       db.session.commit()
 
     return 'Saved to the database!'
@@ -178,10 +188,27 @@ def create_event():
           "name": event.reporter_name,
           "email": event.reporter_email,
           "phone": event.reporter_phone
-        }
+        },
+        "status": event.status
       }
       result.append(data)
+    return jsonify(result)      
+
+@app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
+def eventStatus(id):
+  event = Event.query.filter_by(id=id).first()
+  if request.method == 'GET' :
+    result = []
+    data = {
+        "status": event.status
+    }
+    result.append(data)
     return jsonify(result)
+
+  if request.method == 'PUT':
+    event.status = request.json['status']
+    db.session.commit()
+    return 'Saved to the database!'
 
 if __name__ == '__main__':
     app.run(port='5002', debug=True)

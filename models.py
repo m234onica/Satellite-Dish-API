@@ -30,7 +30,9 @@ class Event(db.Model):
   reporter_email = db.Column(db.String(50), nullable=False)
   reporter_phone = db.Column(db.String(20), nullable=False, unique=True)
 
-  def __init__(self, img, title, link, desc, region, created_at, start_date, end_date, display_date, location, note, category, reporter_name, reporter_email, reporter_phone):
+  status = db.Column(db.Boolean, nullable=True)
+
+  def __init__(self, img, title, link, desc, region, created_at, start_date, end_date, display_date, location, note, category, reporter_name, reporter_email, reporter_phone, status):
     self.img = img
     self.title = title
     self.link = link
@@ -45,9 +47,10 @@ class Event(db.Model):
     self.reporter_name = reporter_name
     self.reporter_email = reporter_email
     self.reporter_phone = reporter_phone
+    self.status = status
 
   def __repr__(self):
-        return "Events('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+        return "Events('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
             self.img,
             self.title,
             self.link,
@@ -62,18 +65,6 @@ class Event(db.Model):
             self.category,
             self.reporter_name,
             self.reporter_email,
-            self.reporter_phone
-        )
-
-class File(db.Model):
-  __tablename__ = 'files'
-  id = db.Column(db.Integer, primary_key=True)
-  img = db.Column(db.LargeBinary)
-  
-  def __init__(self, img):
-    self.img = img
-
-  def __repr__(self):
-        return "Files('{}')".format(
-          self.img
+            self.reporter_phone,
+            self.status
         )
