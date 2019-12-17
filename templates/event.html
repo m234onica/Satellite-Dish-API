@@ -10,9 +10,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
-<script src="../static/js/botton.js" type=text/javascript></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/button.js')}}"></script>
 
 <body>
   <!-- Sidebar -->
@@ -29,27 +28,28 @@
         <h1>Event List</h1>
       </div>
       <table id="event-list" class="w3-table w3-striped w3-hoverable w3-card-2">
-        
-          <tr class=" w3-flat-midnight-blue ">
-            <th>id</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Start Date</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
+          <thead>
+            <tr class=" w3-flat-midnight-blue ">
+              <th>id</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Start Date</th>
+              <th class="w3-center">Description</th>
+              <th class="w3-center">Status</th>
+              <th></th>
+            </tr>
+          </thead>
           {% for event in result %}
           <tr>
             <td>{{ event.index }}</td>
             <td>{{ event.title }}</td>
             <td>{{ event.category }}</td>
             <td>{{ event.date.start }}</td>
-            <td>{{ event.desc }}</td>
-            <td>O</td>
+            <td class="w3-center" style="width: 200px;">{{ event.desc }}</td>
+            <td class="w3-center">{{ event.status }}</td>
             <td><button type="button" 
               class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-white w3-border w3-border-grey w3-hover-border-cyan w3-round-large w3-card-2" //
-              data-id="${event.index}"
+              data-id="{{ event.index }}"
               onclick="document.getElementById('event-detail').style.display='block'">
               Detail »
               </button></td>
@@ -59,7 +59,7 @@
         
       </table>
       
-      <div id="event-detail" class="w3-modal event-detail">
+      <div id="event-detail" class="w3-modal event-detail" data-id="{{id}}">
         <div class="w3-modal-content w3-animate-zoom w3-card-4">
           <header class="w3-container w3-flat-midnight-blue">
             <h2>Event detail page</h2>
@@ -97,37 +97,37 @@
             
             <label class="w3-text-flat-midnight-blue"><b>Description</b></label>
             <input class="w3-input" id="eventDesc" type="text">
+
+            <label class="w3-text-flat-midnight-blue"><b>Region</b></label>
+            <input class="w3-input" id="eventRegion" type="text">
             
             <label class="w3-text-flat-midnight-blue"><b>Reporter Name</b></label>
-            <input class="w3-input" id="eventReporterName" type="text">
+            <input class="w3-input" id="eventReporterName" type="text" disabled>
             
             <label class="w3-text-flat-midnight-blue"><b>Reporter Email</b></label>
-            <input class="w3-input" id="eventReporterEmail" type="text">
+            <input class="w3-input" id="eventReporterEmail" type="text" disabled>
             
             <label class="w3-text-flat-midnight-blue"><b>Reporter Phone</b></label>
-            <input class="w3-input" id="eventReporterPhone" type="text"><br>
+            <input class="w3-input" id="eventReporterPhone" type="text" disabled><br>
             
             <input class="w3-check" type="checkbox" checked="checked">
             <label>Show on banner?</label>
             
           </form>
-          <div class="w3-container">
-            <button type="button"
-                    value="accept"
-                    
-                    class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-cyan w3-round w3-text-white w3-card-2">
-                    Accept
-            </button>
-            <button type="button" 
-                    style="margin:5px;"
-                    onclick="closeWindows();"
-                    class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-grey w3-round w3-card-2">
-                    Cancel
-            </button>
-            <button type="button"
-                    value="reject"
-                    class="w3-button w3-left w3-section w3-hover-grey w3-hover-text-white w3-red w3-round w3-card-2">
-                    Reject
+            <div class="w3-container">
+              <button type="button"
+                      class="accept_button w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-cyan w3-round w3-text-white w3-card-2">
+                      Accept
+              </button>
+              <button type="button" 
+                      style="margin:5px;"
+                      onclick="closeWindows();"
+                      class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-grey w3-round w3-card-2">
+                      Cancel
+              </button>
+              <button type="button"
+                      class="reject_button w3-button w3-left w3-section w3-hover-grey w3-hover-text-white w3-red w3-round w3-card-2">
+                      Reject
             </button>
     </div>
   </div>
@@ -142,7 +142,6 @@
 $('#event-list').on('click', '.event_detail_button', e => {
   e.preventDefault();
   var eventId = e.target.dataset.id;
-  console.log(eventId);
   
   $.ajax({
     type: "GET",
@@ -164,6 +163,59 @@ $('#event-list').on('click', '.event_detail_button', e => {
     $('#eventReporterPhone').val(data[0].reporter.phone)
     $('#eventImage').attr('src', data[0].img)
     $('#eventCategory').val(data[0].category)
+    $('#eventRegion').val(data[0].region)
+  })
+})
+
+$(document).ready(function () {
+  $('.accept_button').click(function () {
+    var eventId = $("#eventIndex").val();
+    var formData = JSON.stringify({
+      'link': $('#eventLink').val(),
+      'desc': $('#eventDesc').val(),
+      'title': $('#eventTitle').val(),
+      'start_date': $('#eventStart').val(),
+      'end_date': $('#eventEnd').val(),
+      'display_date': $('#eventDisplay').val(),
+      'note': $('#eventTitle').val(),
+      'location': $('#eventAddress').val(),
+      'status': true,
+      'region': $('#eventRegion').val(),
+    })
+
+    $.ajax({
+      type: "PUT",
+      url: "/api/event/" + eventId,
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: formData,
+      success: closeWindows('event-detail')
+    })
+  })
+
+  $('.reject_button').click(function () {
+    var eventId = $("#eventIndex").val();
+    var formData = JSON.stringify({
+      'link': $('#eventLink').val(),
+      'desc': $('#eventDesc').val(),
+      'title': $('#eventTitle').val(),
+      'start_date': $('#eventStart').val(),
+      'end_date': $('#eventEnd').val(),
+      'display_date': $('#eventDisplay').val(),
+      'note': $('#eventTitle').val(),
+      'location': $('#eventAddress').val(),
+      'status': false,
+      'region': $('#eventRegion').val(),
+    })
+
+    $.ajax({
+      type: "PUT",
+      url: "/api/event/" + eventId,
+      dataType: 'json',
+      contentType: 'application/json; charset=utf-8',
+      data: formData,
+      success: closeWindows()
+    })
   })
 })
 </script>  

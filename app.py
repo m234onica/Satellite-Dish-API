@@ -51,36 +51,53 @@ def index():
     result.append(data)
   return render_template("event.html", result=result)
 
-@app.route('/api/event/<int:id>')
-def get_each_event(id):
+@app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
+def each_event(id):
   event = Event.query.filter_by(id=id).first()
+  if request.method == 'GET':
 
-  result = []
-  event_category = event.category
-  data = {
-      "index": event.id,
-      "img": event.img,
-      "title": event.title,
-      "category": event_category.name,
-      "region": event.region,
-      "date": {
-          "start": event.start_date.strftime("%Y-%m-%d"),
-          "end": event.end_date.strftime("%Y-%m-%d"),
-      },
-      "display_date": event.display_date,
-      "note": event.note,
-      "address": event.location,
-      "link": event.link,
-      "desc": event.desc,
-      "reporter": {
-          "name": event.reporter_name,
-          "email": event.reporter_email,
-          "phone": event.reporter_phone,
-      },
-      "status": event.status
-  }
-  result.append(data)
-  return jsonify(result)
+    result = []
+    event_category = event.category
+    data = {
+        "index": event.id,
+        "img": event.img,
+        "title": event.title,
+        "category": event_category.name,
+        "region": event.region,
+        "date": {
+            "start": event.start_date.strftime("%Y-%m-%d"),
+            "end": event.end_date.strftime("%Y-%m-%d"),
+        },
+        "display_date": event.display_date,
+        "note": event.note,
+        "address": event.location,
+        "link": event.link,
+        "desc": event.desc,
+        "reporter": {
+            "name": event.reporter_name,
+            "email": event.reporter_email,
+            "phone": event.reporter_phone,
+        },
+        "status": event.status
+    }
+    result.append(data)
+    return jsonify(result)
+
+  if request.method == 'PUT':
+    event.title=request.json['title']
+    # event.category=request.json['category']
+    event.link=request.json['link']
+    event.desc = request.json['desc']
+    event.region = request.json['region']
+    event.start_date = request.json['start_date']
+    event.end_date = request.json['end_date']
+    event.display_date = request.json['display_date']
+    event.location = request.json['location']
+    event.note=request.json['note']
+    event.status = request.json['status']
+    
+    db.session.commit()
+    return 'database is update success.'
 
 @app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def get_events(category, year, month, day):
@@ -194,6 +211,8 @@ def create_event():
 
     return 'Saved to the database!'
 
+  
+
   if request.method == 'GET':
     all_events = Event.query.all()
     result = []
@@ -228,18 +247,18 @@ def create_event():
 @app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
 def eventStatus(id):
   event = Event.query.filter_by(id=id).first()
-  if request.method == 'GET' :
-    result = []
-    data = {
-        "status": event.status
-    }
-    result.append(data)
-    return jsonify(result)
+#   if request.method == 'GET' :
+#     result = []
+#     data = {
+#         "status": event.status
+#     }
+#     result.append(data)
+#     return jsonify(result)
 
-  if request.method == 'PUT':
-    event.status = request.json['status']
-    db.session.commit()
-    return 'Saved to the database!'
+  # if request.method == 'PUT':
+  #   event.status = request.json['status']
+  #   db.session.commit()
+  #   return 'Saved to the database!'
 
 if __name__ == '__main__':
     app.run(port='5002', debug=True)
