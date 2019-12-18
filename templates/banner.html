@@ -1,44 +1,41 @@
-{% extends 'base.html' %}
-{% set active_page = "all" %}
 
-{% block content %}
-    <div class="header w3-padding-48" style="height: 100%">
-      <h1>Banner List</h1>
-    </div>
-    <table id="banner-list" class="w3-table w3-striped w3-hoverable w3-card-2">
-      <thead>
-        <tr class=" w3-flat-midnight-blue ">
-          <th>id</th>
-          <th class="w3-center">Title</th>
-          <th class="w3-center">Description</th>
-          <th>Display date</th>
-          <th>Address</th>
-          <th class="w3-center">Image</th>
-        </tr>
-      </thead>
-      {% for event in result %}
-      <tr>
-        <td>{{ event.index }}</td>
-        <td class="w3-center" style="width: 25%;">{{ event.title }}</td class="w3-center">
-          <td class="w3-center" style="width: 25%;">{{ event.desc }}</td>
-          <td style="width: 25%;">{{event.display_date}}</td>
-          <td style="width: 25%;">{{event.address}}</td>
-          <td class="w3-center">
-            <i class='fas fa-image banner_image_button' style='font-size:20px;' data-id="{{ event.index }}"
-              onclick="document.getElementById('image_modal').style.display='block'">
-            </i>
-          </td>
-      </tr>
-      {% endfor %}
 
-    </table>
+{% block active_page %}
+{% endblock  %}
 
-    <div id="image_modal" class="w3-modal w3-animate-zoom" onclick="this.style.display='none'">
-      <img class="center" id="bannerImage" src="" style="height: 90%;">
-    </div>
+<table id="banner-list" class="w3-table w3-striped w3-hoverable w3-card-2">
+  <thead>
+    <tr class=" w3-flat-midnight-blue ">
+      <th>id</th>
+      <th class="w3-center">Title</th>
+      <th class="w3-center">Description</th>
+      <th>Display date</th>
+      <th>Address</th>
+      <th class="w3-center">Image</th>
+    </tr>
+  </thead>
+  {% for event in result %}
+  <tr>
+    <td>{{ event.index }}</td>
+    <td class="w3-center" style="width: 25%;">{{ event.title }}</td class="w3-center">
+    <td class="w3-center" style="width: 25%;">{{ event.desc }}</td>
+    <td style="width: 25%;">{{event.display_date}}</td>
+    <td style="width: 25%;">{{event.address}}</td>
+    <td class="w3-center">
+      <i class='fas fa-image banner_image_button' style='font-size:20px;' data-id="{{ event.index }}"
+        onclick="document.getElementById('image_modal').style.display='block'">
+      </i>
+    </td>
+  </tr>
+  {% endfor %}
 
-    <script type=text/javascript>
-      $('#banner-list').on('click', '.banner_image_button', e => {
+</table>
+
+<div id="image_modal" class="w3-modal w3-animate-zoom" onclick="this.style.display='none'">
+  <img class="center" id="bannerImage" src="" style="height: 90%;">
+</div>
+
+<script type=text/javascript> $('#banner-list').on('click', '.banner_image_button' , e=> {
           e.preventDefault();
           var eventId = e.target.dataset.id;
           $.ajax({
@@ -51,9 +48,3 @@
           })
       })
     </script>
-{% endblock content %}
-
-
-
-
-

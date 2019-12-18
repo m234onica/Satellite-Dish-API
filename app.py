@@ -60,7 +60,7 @@ def event():
   return render_template("event.html", result=result)
 
 
-@app.route('/banner')
+@app.route('/all_banner')
 def get_all_banner():
 
   result = []
@@ -76,7 +76,54 @@ def get_all_banner():
         "desc": banner.desc
     }
     result.append(data)
-  return render_template("banner.html", result=result)
+  return render_template("all_banner.html", result=result)
+
+@app.route('/home_banner', methods=['GET'])
+def home_banner():
+  result = []
+  home_banners = Event.query.filter_by(
+      status=1).filter_by(home_banner=1).all()
+
+  for banner in home_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  return render_template("home_banner.html", result=result)
+
+
+@app.route('/category_banner/<category>', methods=['GET'])
+def category_banner(category):
+  if category not in CATEGORY_DB:
+    return 'Category is not found.', 400
+
+  result = []
+  category_banners = Event.query.filter_by(
+      status=1).filter_by(category_banner=1).filter_by(category=category).all()
+
+  for banner in category_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  if category == 'music':
+    return render_template("music.html", result=result)
+  if category == 'visual_art':
+    return render_template("visual_art.html", result=result)
+  if category == 'market':
+    return render_template("market.html", result=result)
+  if category == 'theater':
+    return render_template("theater.html", result=result)
 
 @app.route('/api/banner', methods=['GET'])
 def banner():
@@ -84,6 +131,45 @@ def banner():
   all_banners = Event.query.all()
 
   for banner in all_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  return jsonify(result)
+
+@app.route('/api/home_banner', methods=['GET'])
+def get_home_banner():
+  result = []
+  home_banners = Event.query.filter_by(status=1).filter_by(home_banner=1).all()
+
+  for banner in home_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  return jsonify(result)
+
+
+@app.route('/api/category_banner/<category>', methods=['GET'])
+def get_category_banner(category):
+  if category not in CATEGORY_DB:
+    return 'Category is not found.', 400
+
+  result = []
+  category_banners = Event.query.filter_by(
+      status=1).filter_by(category_banner=1).filter_by(category=category).all()
+
+  for banner in category_banners:
     data = {
         "index": banner.id,
         "img": banner.img,
