@@ -1,136 +1,129 @@
-<!DOCTYPE html>
-<html>
-<title>Satellite Dish</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="../static/css/event.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% extends 'base.html' %}
+{% set active_page = "event" %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-
-<script type="text/javascript" src="{{url_for('static', filename='js/button.js')}}"></script>
-
-<body>
-  <!-- Sidebar -->
-  <div class="w3-sidebar  w3-flat-midnight-blue w3-bar-block" style="width:15%">
-    <h2 class="w3-bar-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
-    <a href="/" onclick="fetchEvents()" class=" w3-bar-item w3-button w3-hover-cyan w3-hover-text-white active" style="font-size:1.2em">Event</a>
-    <a href="banner.html" class=" w3-bar-item w3-button w3-hover-cyan w3-hover-text-white" style="font-size:1.2em">Banner</a>
+{% block content %}
+  <div class="header w3-padding-48" style="height: 100%">
+    <h1>Event List</h1>
   </div>
-  
-  <!-- Page Content -->
-  <div style="margin-left:15%">
-    <div class="w3-container w3-white">
-      <div class="header w3-padding-48" style="height: 100%">
-        <h1>Event List</h1>
-      </div>
-      <table id="event-list" class="w3-table w3-striped w3-hoverable w3-card-2">
-          <thead>
-            <tr class=" w3-flat-midnight-blue ">
-              <th>id</th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Start Date</th>
-              <th class="w3-center">Description</th>
-              <th class="w3-center">Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          {% for event in result %}
-          <tr>
-            <td>{{ event.index }}</td>
-            <td>{{ event.title }}</td>
-            <td>{{ event.category }}</td>
-            <td>{{ event.date.start }}</td>
-            <td class="w3-center" style="width: 200px;">{{ event.desc }}</td>
-            <td class="w3-center">{{ event.status }}</td>
-            <td><button type="button" 
-              class="event_detail_button w3-button w3-hover-text-white w3-hover-cyan w3-white w3-border w3-border-grey w3-hover-border-cyan w3-round-large w3-card-2" //
-              data-id="{{ event.index }}"
-              onclick="document.getElementById('event-detail').style.display='block'">
-              Detail »
-              </button></td>
-          </tr>
-          {% endfor %}
-        
-        
-      </table>
+  <table id="event-list" class="w3-table w3-striped w3-hoverable w3-card-2">
+    <thead>
+      <tr class=" w3-flat-midnight-blue ">
+        <th>id</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Start Date</th>
+        <th class="w3-center">Description</th>
+        <th class="w3-center">Status</th>
+        <th class="w3-center">Detail</th>
+      </tr>
+    </thead>
+    {% for event in result %}
+    <tr>
+      <td>{{ event.index }}</td>
+      <td style="width: 20%;">{{ event.title }}</td>
+      <td>{{ event.category }}</td>
+      <td>{{ event.date.start }}</td>
+      <td class="w3-center" style="width: 30%;">{{ event.desc }}</td>
+      {% if event.status == true %}
+        <td class="w3-center w3-text-green">
+          Accept
+        </td>
+      {% elif event.status == false%}
+        <td class="w3-center w3-text-red">
+          Reject
+        </td>
+      {% elif event.status == None %}
+        <td class="w3-center">
+          Review
+        </td>
+      {% endif %}
+      <td class="w3-center">
+        <i class='fas fa-eye event_detail_button' 
+        style='font-size:20px;' 
+        data-id="{{ event.index }}" 
+        onclick="document.getElementById('event-detail').style.display='block'">
+      </i>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div id="event-detail" class="w3-modal event-detail">
+  <div class="w3-modal-content w3-animate-zoom w3-card-4">
+    <header class="w3-container w3-flat-midnight-blue">
+      <h2>Event detail page</h2>
+    </header>
+    
+    <form class="w3-container" style="padding: 10px;">
+      <img class="center" id="eventImage" src='' width="70%" /><br>
       
-      <div id="event-detail" class="w3-modal event-detail" data-id="{{id}}">
-        <div class="w3-modal-content w3-animate-zoom w3-card-4">
-          <header class="w3-container w3-flat-midnight-blue">
-            <h2>Event detail page</h2>
-          </header>
-          
-          <form class="w3-container" style="padding: 10px;">
-            <img class="center" id="eventImage" src='' width="70%" /><br>
-            
-            <label class="w3-text-flat-midnight-blue"><b>Index</b></label>
-            <input class="w3-input" id="eventIndex" type="text" disabled>
-            
-            <label class="w3-text-flat-midnight-blue"><b>Title</b></label>
-            <input class="w3-input" id="eventTitle" type="text">
-
-            <label class="w3-text-flat-midnight-blue"><b>Category</b></label>
-            <input class="w3-input" id="eventCategory" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Link</b></label>
-            <input class="w3-input" id="eventLink" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Start Date</b></label>
-            <input class="w3-input" id="eventStart" type="date">
-            
-            <label class="w3-text-flat-midnight-blue"><b>End Date</b></label>
-            <input class="w3-input" id="eventEnd" type="date">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Display Date</b></label>
-            <input class="w3-input" id="eventDisplay" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Note</b></label>
-            <input class="w3-input" id="eventNote" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Address</b></label>
-            <input class="w3-input" id="eventAddress" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Description</b></label>
-            <input class="w3-input" id="eventDesc" type="text">
-
-            <label class="w3-text-flat-midnight-blue"><b>Region</b></label>
-            <input class="w3-input" id="eventRegion" type="text">
-            
-            <label class="w3-text-flat-midnight-blue"><b>Reporter Name</b></label>
-            <input class="w3-input" id="eventReporterName" type="text" disabled>
-            
-            <label class="w3-text-flat-midnight-blue"><b>Reporter Email</b></label>
-            <input class="w3-input" id="eventReporterEmail" type="text" disabled>
-            
-            <label class="w3-text-flat-midnight-blue"><b>Reporter Phone</b></label>
-            <input class="w3-input" id="eventReporterPhone" type="text" disabled><br>
-            
-            <input class="w3-check" type="checkbox" checked="checked">
-            <label>Show on banner?</label>
-            
-          </form>
-            <div class="w3-container">
-              <button type="button"
-                      class="accept_button w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-cyan w3-round w3-text-white w3-card-2">
-                      Accept
-              </button>
-              <button type="button" 
-                      style="margin:5px;"
-                      onclick="closeWindows();"
-                      class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-grey w3-round w3-card-2">
-                      Cancel
-              </button>
-              <button type="button"
-                      class="reject_button w3-button w3-left w3-section w3-hover-grey w3-hover-text-white w3-red w3-round w3-card-2">
-                      Reject
-            </button>
-    </div>
-  </div>
+      <label class="w3-text-flat-midnight-blue"><b>Index</b></label>
+      <input class="w3-input" id="eventIndex" type="text" disabled>
+      
+      <label class="w3-text-flat-midnight-blue"><b>Title</b></label>
+      <input class="w3-input" id="eventTitle" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Category</b></label>
+      <input class="w3-input" id="eventCategory" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Link</b></label>
+      <input class="w3-input" id="eventLink" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Start Date</b></label>
+      <input class="w3-input" id="eventStart" type="date">
+      
+      <label class="w3-text-flat-midnight-blue"><b>End Date</b></label>
+      <input class="w3-input" id="eventEnd" type="date">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Display Date</b></label>
+      <input class="w3-input" id="eventDisplay" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Note</b></label>
+      <input class="w3-input" id="eventNote" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Address</b></label>
+      <input class="w3-input" id="eventAddress" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Description</b></label>
+      <input class="w3-input" id="eventDesc" type="text">
+      
+      <label class="w3-text-flat-midnight-blue"><b>Region</b></label>
+      <select class="w3-select w3-border" name='option' id="eventRegion">
+        <option value="">無</option>
+        <option value="北部">北部</option>
+        <option value="中部">中部</option>
+        <option value="南部">南部</option>
+        <option value="東部">東部</option>
+      </select>
+      <label class="w3-text-flat-midnight-blue"><b>Reporter Name</b></label>
+      <input class="w3-input" id="eventReporterName" type="text" disabled>
+      
+      <label class="w3-text-flat-midnight-blue"><b>Reporter Email</b></label>
+      <input class="w3-input" id="eventReporterEmail" type="text" disabled>
+      
+      <label class="w3-text-flat-midnight-blue"><b>Reporter Phone</b></label>
+      <input class="w3-input" id="eventReporterPhone" type="text" disabled>
+      
+      <label class="w3-text-flat-midnight-blue"><b>Show on banner?</b></label><br>
+      <input class="w3-check" id="eventHomeBanner" type="checkbox"> Home banner <br>
+      <input class="w3-check" id="eventCategoryBanner" type="checkbox"> Category banner <br>
+    
+    </form>
+    <div class="w3-container">
+      <button type="button"
+      class="accept_button w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-cyan w3-round w3-text-white w3-card-2">
+      Accept
+    </button>
+    <button type="button" 
+    style="margin:5px;"
+    onclick="closeWindows();"
+    class="w3-button w3-right w3-section w3-hover-grey w3-hover-text-white w3-grey w3-round w3-card-2">
+    Cancel
+  </button>
+  <button type="button"
+  class="reject_button w3-button w3-left w3-section w3-hover-grey w3-hover-text-white w3-red w3-round w3-card-2">
+  Reject
+</button>
 </div>
 </div>
 </div>
@@ -164,6 +157,17 @@ $('#event-list').on('click', '.event_detail_button', e => {
     $('#eventImage').attr('src', data[0].img)
     $('#eventCategory').val(data[0].category)
     $('#eventRegion').val(data[0].region)
+
+    if(data[0].banner.home == true) {
+      $('#eventHomeBanner').attr('checked', true)
+    }else {
+      $('#eventHomeBanner').attr('checked', false)
+    }
+    if(data[0].banner.category == true) {
+      $('#eventCategoryBanner').attr('checked', true)
+    }else {
+      $('#eventCategoryBanner').attr('checked', false)
+    }
   })
 })
 
@@ -181,6 +185,8 @@ $(document).ready(function () {
       'location': $('#eventAddress').val(),
       'status': true,
       'region': $('#eventRegion').val(),
+      'category': $('#eventCategory').val()
+      
     })
 
     $.ajax({
@@ -195,6 +201,8 @@ $(document).ready(function () {
 
   $('.reject_button').click(function () {
     var eventId = $("#eventIndex").val();
+    console.log($('#eventCategory').val());
+    
     var formData = JSON.stringify({
       'link': $('#eventLink').val(),
       'desc': $('#eventDesc').val(),
@@ -206,6 +214,7 @@ $(document).ready(function () {
       'location': $('#eventAddress').val(),
       'status': false,
       'region': $('#eventRegion').val(),
+      'category': $('#eventCategory').val()
     })
 
     $.ajax({
@@ -218,7 +227,10 @@ $(document).ready(function () {
     })
   })
 })
-</script>  
-</body>
 
-</html>
+var closeWindows = function () {
+  document.getElementById('event-detail').style.display = 'none';
+}
+
+</script>  
+{% endblock content %}

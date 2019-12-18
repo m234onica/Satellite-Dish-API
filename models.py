@@ -31,8 +31,13 @@ class Event(db.Model):
   reporter_phone = db.Column(db.String(20), nullable=False, unique=True)
 
   status = db.Column(db.Boolean, nullable=True)
+  home_banner = db.Column(db.Boolean, nullable=True, default=False)
+  category_banner = db.Column(db.Boolean, nullable=True, default=False)
 
-  def __init__(self, img, title, link, desc, region, created_at, start_date, end_date, display_date, location, note, category, reporter_name, reporter_email, reporter_phone, status):
+  def __init__(self, img, title, link, desc, region, 
+              created_at, start_date, end_date, display_date, 
+              location, note, category, reporter_name, reporter_email, reporter_phone, 
+              status, home_banner, category_banner):
     self.img = img
     self.title = title
     self.link = link
@@ -48,9 +53,11 @@ class Event(db.Model):
     self.reporter_email = reporter_email
     self.reporter_phone = reporter_phone
     self.status = status
+    self.home_banner = home_banner
+    self.category_banner = category_banner
 
   def __repr__(self):
-        return "Events('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+        return "Events('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
             self.img,
             self.title,
             self.link,
@@ -66,5 +73,7 @@ class Event(db.Model):
             self.reporter_name,
             self.reporter_email,
             self.reporter_phone,
-            self.status
+            self.status,
+            self.home_banner,
+            self.category_banner
         )

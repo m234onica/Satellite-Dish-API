@@ -1,4 +1,4 @@
-USE testDB;
+-- USE testDB;
 -- CREATE TABLE events(
 --   id              INT           NOT NULL    AUTO_INCREMENT,
 --   img             VARCHAR(100)  NOT NULL,
@@ -15,9 +15,12 @@ USE testDB;
 --   reporter_name   VARCHAR(20)   NOT NULL,
 --   reporter_email  VARCHAR(50)   NOT NULL,
 --   reporter_phone  VARCHAR(20)   NOT NULL    UNIQUE,
---   region VARCHAR(10),
+--   region          VARCHAR(10),
+--   home_banner     boolean,
+--   category_banner boolean,
+--   status          boolean,
 --   PRIMARY KEY( id )
--- -- );
+-- );
 
 -- INSERT INTO events
 --   (
@@ -33,7 +36,8 @@ USE testDB;
 --   reporter_name,
 --   reporter_email,
 --   reporter_phone,
---   region
+--   region,
+--   status,
 --   )
 -- VALUES
 -- (
@@ -48,12 +52,7 @@ USE testDB;
 --   "theater",
 --   "投稿人姓名",
 --   "linroex@coder.tw",
---   "0930330431",
---   "北部"
+--   "0930330321",
+--   "北部",
+--   "0"
 --   );
-
-CREATE TABLE files(
-  id    INT       NOT NULL    AUTO_INCREMENT,
-  img   LONGBLOB  NOT NULL,
-  PRIMARY KEY( id )
-);

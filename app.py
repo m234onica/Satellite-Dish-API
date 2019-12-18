@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, current_app
+from flask import Flask, request, jsonify, render_template, current_app, url_for, redirect
 from datetime import date, timedelta, datetime
 from enum import Enum
 
@@ -20,6 +20,10 @@ class Category(Enum):
 
 @app.route('/')
 def index():
+  return redirect(url_for('event'))
+
+@app.route('/event')
+def event():
 
   all_events = Event.query.all()
   result = []
@@ -27,14 +31,14 @@ def index():
   for event in all_events:
     event_category = event.category
     data = {
-        "index": event.id,
-        "img": event.img,
+      "index": event.id,
+      "img": event.img,
       "title": event.title,
       "category": event_category.name,
       "region": event.region,
       "date": {
-          "start": event.start_date.strftime("%Y-%m-%d"),
-          "end": event.end_date.strftime("%Y-%m-%d"),
+        "start": event.start_date.strftime("%Y-%m-%d"),
+        "end": event.end_date.strftime("%Y-%m-%d"),
       },
         "display_date": event.display_date,
       "note": event.note,
@@ -46,10 +50,50 @@ def index():
           "email": event.reporter_email,
         "phone": event.reporter_phone
       },
-        "status": event.status
+        "status": event.status,
+        "banner":{
+          "home": event.home_banner,
+          "category": event.category_banner,
+        }
     }
     result.append(data)
   return render_template("event.html", result=result)
+
+
+@app.route('/banner')
+def get_all_banner():
+
+  result = []
+  all_banners = Event.query.filter_by(status=1).all()
+
+  for banner in all_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  return render_template("banner.html", result=result)
+
+@app.route('/api/banner', methods=['GET'])
+def banner():
+  result = []
+  all_banners = Event.query.all()
+
+  for banner in all_banners:
+    data = {
+        "index": banner.id,
+        "img": banner.img,
+        "title": banner.title,
+        "display_date": banner.display_date,
+        "address": banner.location,
+        "desc": banner.desc
+    }
+    result.append(data)
+  return jsonify(result)
 
 @app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
 def each_event(id):
@@ -78,14 +122,18 @@ def each_event(id):
             "email": event.reporter_email,
             "phone": event.reporter_phone,
         },
-        "status": event.status
+        "status": event.status,
+        "banner":{
+          "home": event.home_banner,
+          "category": event.category_banner,
+        }
     }
     result.append(data)
     return jsonify(result)
 
   if request.method == 'PUT':
     event.title=request.json['title']
-    # event.category=request.json['category']
+    event.category=request.json['category']
     event.link=request.json['link']
     event.desc = request.json['desc']
     event.region = request.json['region']
@@ -95,7 +143,9 @@ def each_event(id):
     event.location = request.json['location']
     event.note=request.json['note']
     event.status = request.json['status']
-    
+    event.home_banner = request.json['home_banner']
+    event.category_banner = request.json['category_banner']
+
     db.session.commit()
     return 'database is update success.'
 
@@ -135,26 +185,6 @@ def get_events(category, year, month, day):
     }
     result.append(data)
   return jsonify(result)
-
-
-@app.route('/api/banner', methods=['GET'])
-def get_all_banner():
-  
-  result = []
-  all_banners = Event.query.all()
-
-  for banner in all_banners:
-    data = {
-      "index": banner.id,
-      "img": banner.img,
-      "title": banner.title,
-      "display_date": banner.display_date,
-      "address": banner.location,
-      "desc": banner.desc
-    }
-    result.append(data)
-  return jsonify(result)
-
 
 @app.route('/api/<category>/banner', methods=['GET'])
 def get_banner(category):
@@ -211,8 +241,6 @@ def create_event():
 
     return 'Saved to the database!'
 
-  
-
   if request.method == 'GET':
     all_events = Event.query.all()
     result = []
@@ -226,8 +254,8 @@ def create_event():
         "category": event_category.name,
         "region": event.region,
         "date": {
-            "start": event.start_date.strftime("%Y-%m-%d"),
-            "end": event.end_date.strftime("%Y-%m-%d"),
+          "start": event.start_date.strftime("%Y-%m-%d"),
+          "end": event.end_date.strftime("%Y-%m-%d"),
         },
         "display_date": event.display_date,
         "note": event.note,
@@ -239,26 +267,14 @@ def create_event():
           "email": event.reporter_email,
           "phone": event.reporter_phone
         },
-        "status": event.status
+        "status": event.status,
+        "banner":{
+          "home": event.home_banner,
+          "category": event.category_banner,
+        }
       }
       result.append(data)
-    return render_template("event.html", result=result)      
-
-@app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
-def eventStatus(id):
-  event = Event.query.filter_by(id=id).first()
-#   if request.method == 'GET' :
-#     result = []
-#     data = {
-#         "status": event.status
-#     }
-#     result.append(data)
-#     return jsonify(result)
-
-  # if request.method == 'PUT':
-  #   event.status = request.json['status']
-  #   db.session.commit()
-  #   return 'Saved to the database!'
+    return jsonify(result)      
 
 if __name__ == '__main__':
     app.run(port='5002', debug=True)
