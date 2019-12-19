@@ -314,6 +314,8 @@ def create_event():
       reporter_email=request.json['reporter_email'],
       reporter_phone=request.json['reporter_phone'],
       status=None,
+      home_banner=None,
+      category_banner=None
       )
     
     db.session.add(new_event)

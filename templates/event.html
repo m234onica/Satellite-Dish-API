@@ -63,8 +63,13 @@
       <label class="w3-text-flat-midnight-blue"><b>Title</b></label>
       <input class="w3-input" id="eventTitle" type="text">
       
-      <label class="w3-text-flat-midnight-blue"><b>Category</b></label>
-      <input class="w3-input" id="eventCategory" type="text">
+      <label class="w3-text-flat-midnight-blue"><b>Category</b></label><br>
+      <select class="w3-select w3-border" style="width:200px;" name='option' id="eventCategory">
+        <option value="music">獨立音樂</option>
+        <option value="visual_art">視覺藝術</option>
+        <option value="market">市集</option>
+        <option value="theater">劇場</option>
+      </select><br>
       
       <label class="w3-text-flat-midnight-blue"><b>Link</b></label>
       <input class="w3-input" id="eventLink" type="text">
@@ -76,7 +81,7 @@
       <input class="w3-input" id="eventEnd" type="date">
       
       <label class="w3-text-flat-midnight-blue"><b>Display Date</b></label>
-      <input class="w3-input" id="eventDisplay" type="text">
+      <textarea class="w3-input" id="eventDisplay" rows='2'></textarea>
       
       <label class="w3-text-flat-midnight-blue"><b>Note</b></label>
       <input class="w3-input" id="eventNote" type="text">
@@ -85,7 +90,7 @@
       <input class="w3-input" id="eventAddress" type="text">
       
       <label class="w3-text-flat-midnight-blue"><b>Description</b></label>
-      <input class="w3-input" id="eventDesc" type="text">
+      <textarea class="w3-input" id="eventDesc" rows='3'></textarea>
       
       <label class="w3-text-flat-midnight-blue"><b>Region</b></label>
       <select class="w3-select w3-border" name='option' id="eventRegion">
@@ -95,6 +100,7 @@
         <option value="南部">南部</option>
         <option value="東部">東部</option>
       </select>
+
       <label class="w3-text-flat-midnight-blue"><b>Reporter Name</b></label>
       <input class="w3-input" id="eventReporterName" type="text" disabled>
       
