@@ -225,22 +225,13 @@ $(document).ready(function () {
       'display_date': $('#eventDisplay').val(),
       'note': $('#eventTitle').val(),
       'location': $('#eventAddress').val(),
-      'status': true,
+      'status': false,
       'region': $('#eventRegion').val(),
       'category': $('#eventCategory').val(),
       'home_banner': false,
       'category_banner': false
     }
-    if($("#eventHomeBanner").prop('checked')){
-      Data.home_banner = true
-    }else{
-      Data.home_banner = false
-    }
-    if($("#eventCategoryBanner").prop('checked')){
-      Data.category_banner = true
-    }else{
-      Data.category_banner = false
-    }
+    
     form = JSON.stringify(Data)
     console.log(form)
 

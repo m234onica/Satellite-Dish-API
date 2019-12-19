@@ -11,74 +11,52 @@
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   
-  
-  <!-- <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/event.css')}}">
-  <script type="text/javascript" src="{{url_for('static', filename='js/button.js')}}"></script> -->
-
-  <style>
-    .active {
-      background-color: #F1F1F1;
-      color: black;
-    }
-    .center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  </style>
+  <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/event.css')}}">
+  <script type="text/javascript" src="{{url_for('static', filename='js/button.js')}}"></script>
 
 </head>
 <body>
-<div class="w3-sidebar w3-flat-midnight-blue w3-bar-block" style="width:15%">
+<div class="w3-sidebar w3-flat-midnight-blue w3-bar-block" id="sidebar" style="width:15%">
   <h2 class="w3-bar-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
+  
   <a href="/event"
     class=" w3-bar-item w3-button w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'event' else '' }}"
     style="font-size:1.2em">Event</a>
 
   <div class="w3-accordion">
     <a href="/all_banner"
-      class=" w3-bar-item w3-button w3-hover-cyan w3-hover-text-white  {{ 'active' if active_page == 'banner' else '' }}"
+      class=" w3-bar-item w3-button w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'all' else '' }}"
       style="font-size:1.2em">Banner</a>
-    <div id="sidebar-accordion" class="w3-accordion-content  {{ 'active' if active_page == 'banner' else '' }}" >
+   
+    <div id="sidebar-accordion" class="w3-accordion-content" >
       <ul class="w3-ul">
-        <a href="/all_banner" class="w3-bar-item w3-button w3-hover-cyan  w3-hover-text-white  {{ 'active' if active_page == 'all_banner' else '' }}"
-          style="padding-left: 18%; font-size:1.2em;">All</a>
-        <a href="/home_banner" class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'home' else '' }}"
-          style="padding-left: 18%; font-size:1.1em;">Home</a>
-          
-        <div class="w3-dropdown-click">
-          <a onclick="myFunction()" class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white"
-          style="padding-left: 18%; font-size:1.1em;">Category <i class="fa fa-caret-down"></i></a>
-          <div id="category-dropbox" class="w3-dropdown-content w3-card w3-light-grey">
-            <a href="/category_banner/music" class="w3-bar-item w3-button w3-center w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'music' else '' }}">Music</a>
-            <a href="/category_banner/visual_art" class="w3-bar-item w3-button w3-center w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'visual_art' else '' }}">Visual Art</a>
-            <a href="/category_banner/market" class="w3-bar-item w3-button w3-center w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'market' else '' }}">Market</a>
-            <a href="/category_banner/theater" class="w3-bar-item w3-button w3-center w3-hover-cyan w3-hover-text-white {{ 'active' if active_page == 'theater' else '' }}">Theater</a>
-          </div>
-        </div>
+        <a href="/home_banner" 
+          class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white sidebar_position {{ 'active' if active_page == 'home' else '' }}">
+          Home</a>
+        <a href="/category_banner/music" 
+          class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white sidebar_position {{ 'active' if active_page == 'music' else '' }}">
+          Music</a>
+        <a href="/category_banner/visual_art" 
+          class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white sidebar_position {{ 'active' if active_page == 'visual_art' else '' }}">
+          Visual Art</a>
+        <a href="/category_banner/market" 
+          class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white sidebar_position {{ 'active' if active_page == 'market' else '' }}">
+          Market</a>
+        <a href="/category_banner/theater" 
+          class="w3-bar-item w3-button w3-hover-cyan w3-hover-text-white sidebar_position {{ 'active' if active_page == 'theater' else '' }}">
+          Theater</a>
       </ul>
     </div>
+
   </div>
 </div>
 <div style="margin-left:15%">
   <div class="w3-container w3-white">
     {% block active_page %}
     {% endblock  %}
-
     {% block content %}{% endblock content %}
   </div>
 </div>
-
-<script type=text/javascript>
-  function myFunction() {
-    var x = document.getElementById("category-dropbox");
-    if (x.className.indexOf("w3-show") == -1)
-        x.className += " w3-show";
-    else
-        x.className = x.className.replace(" w3-show", "");
-  }
-  
-</script>
 </body>
 </html>
 
