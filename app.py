@@ -12,20 +12,16 @@ import json
 
 app = create_app()
 
-def get_event():
-  page = request.args.get('page', 1, type=int)
-  return Event.query.order_by(Event.id).paginate(page,
-                                                per_page=PER_PAGE,
-                                                error_out=True,
-                                                max_per_page=None).items
-
 @app.route('/')
 def index():
   return redirect(url_for('event'))
 
 @app.route('/event', methods=['GET'])
 def event():
-  all_events = get_event()
+  page = request.args.get('page', 1, type=int)
+  pagination = Event.query.order_by(Event.id).\
+                paginate(page,per_page=PER_PAGE,error_out=True,max_per_page=None)
+  all_events = pagination.items
                    
   result = []
   for event in all_events:
@@ -57,18 +53,16 @@ def event():
         }
     }
     result.append(data)
-  return render_template("event.html", result=result)
+  return render_template("event.html", result=result, pagination=pagination)
 
 
 @app.route('/all_banner')
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
-  all_banners = Event.query.filter_by(status=1).\
-                            order_by(Event.id).\
-                            paginate(page, 
-                                    per_page=PER_PAGE,
-                                    error_out=True, 
-                                    max_per_page=None).items
+  pagination = Event.query.filter_by(status=1).order_by(Event.id).\
+                  paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
+  all_banners = pagination.items
+
   result = []
   for banner in all_banners:
     data = {
@@ -80,18 +74,14 @@ def get_all_banner():
         "desc": banner.desc
     }
     result.append(data)
-  return render_template("all_banner.html", result=result)
+  return render_template("all_banner.html", result=result, pagination=pagination)
 
 @app.route('/home_banner', methods=['GET'])
 def home_banner():
   page = request.args.get('page', 1, type=int)
-  home_banners = Event.query.filter_by(status=1).\
-                              filter_by(home_banner=1).\
-                              order_by(Event.id).\
-                              paginate(page, 
-                                      per_page=PER_PAGE,
-                                      error_out=True, 
-                                      max_per_page=None).items
+  pagination = Event.query.filter_by(status=1).filter_by(home_banner=1).order_by(Event.id).\
+                  paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
+  home_banners = pagination.items
   result = []
   for banner in home_banners:
     data = {
@@ -103,7 +93,7 @@ def home_banner():
         "desc": banner.desc
     }
     result.append(data)
-  return render_template("home.html", result=result)
+  return render_template("home.html", result=result, pagination=pagination)
 
 
 @app.route('/category_banner/<category>', methods=['GET'])
@@ -112,14 +102,10 @@ def category_banner(category):
     return 'Category is not found.', 400
 
   page = request.args.get('page', 1, type=int)
-  category_banners = Event.query.filter_by(status=1).\
-                                  filter_by(category_banner=1).\
-                                  filter_by(category=category).\
-                                  order_by(Event.id).\
-                                  paginate(page, 
-                                          per_page=PER_PAGE,
-                                          error_out=True, 
-                                          max_per_page=None).items
+  pagination = Event.query.filter_by(status=1).\
+                  filter_by(category_banner=1). filter_by(category=category). order_by(Event.id).\
+                  paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
+  category_banners = pagination.items
   result = []
   for banner in category_banners:
     data = {
@@ -133,7 +119,7 @@ def category_banner(category):
     result.append(data)
 
   for category in CATEGORY_DB:
-    return render_template(category+".html", result=result)
+    return render_template(category+".html", result=result, pagination=pagination)
 
 @app.route('/api/banner', methods=['GET'])
 def banner():

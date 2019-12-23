@@ -1,27 +1,57 @@
 html, body, .container-fluid, .row {
-      height: 100%;
-    }
-    .sidebar_position {
-      padding-left: 15%; 
-      font-size:1.1em;
-    }
-    .sidebar_active {
-      background-color: #F1F1F1;
-      color: black;
-    }
+  height: 100%;
+}
+.sidebar_position {
+  padding-left: 15%; 
+  font-size:1.1em;
+}
+.customized_active {
+  background-color: #F1F1F1;
+  color: black;
+}
 
-    .center {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .no_scroll {
-      position: fixed;
-    }
-    a {
-      color: white;
-    }
-    a:hover {
-      background-color: grey;
-      color: white;
-    }
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.no_scroll {
+  position: fixed;
+}
+a {
+  color: white;
+}
+a:hover {
+  background-color: grey;
+  color: white;
+}
+
+.page-link {
+  
+  color: #343A40;
+  background-color: white;
+  border: 1px solid #343A40;
+}
+ 
+.page-item.disabled .page-link {
+  color: #868e96;
+  pointer-events: none;
+  cursor: auto;
+  background-color: white;
+  border-color: #718393;
+}
+ 
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: #343A40;
+  border-color: #343A40;
+}
+ 
+.page-link:focus, .page-link:hover {
+  color: #fff;
+  text-decoration: none;
+  background-color: #343A40;
+  border-color: #343A40;
+ 
+}
