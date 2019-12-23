@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify, render_template, current_app, url_for, redirect
+from flask import Flask, request, jsonify, render_template, \
+current_app, url_for, redirect, flash
 from datetime import date, timedelta, datetime
 from enum import Enum
 
 from init import create_app, db
-from config import CATEGORY_DB, ALLOWED_EXTENSIONS
+from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
 from models import Event, category_Enum
 from storage import decode_and_get_url
 
@@ -11,23 +12,22 @@ import json
 
 app = create_app()
 
-
-class Category(Enum):
-    music = 0
-    visual_art = 1
-    market = 2
-    theater = 3
+def get_event():
+  page = request.args.get('page', 1, type=int)
+  return Event.query.order_by(Event.id).paginate(page,
+                                                per_page=PER_PAGE,
+                                                error_out=True,
+                                                max_per_page=None).items
 
 @app.route('/')
 def index():
   return redirect(url_for('event'))
 
-@app.route('/event')
+@app.route('/event', methods=['GET'])
 def event():
-
-  all_events = Event.query.all()
+  all_events = get_event()
+                   
   result = []
-
   for event in all_events:
     event_category = event.category
     data = {
@@ -62,10 +62,14 @@ def event():
 
 @app.route('/all_banner')
 def get_all_banner():
-
+  page = request.args.get('page', 1, type=int)
+  all_banners = Event.query.filter_by(status=1).\
+                            order_by(Event.id).\
+                            paginate(page, 
+                                    per_page=PER_PAGE,
+                                    error_out=True, 
+                                    max_per_page=None).items
   result = []
-  all_banners = Event.query.filter_by(status=1).all()
-
   for banner in all_banners:
     data = {
         "index": banner.id,
@@ -80,10 +84,15 @@ def get_all_banner():
 
 @app.route('/home_banner', methods=['GET'])
 def home_banner():
+  page = request.args.get('page', 1, type=int)
+  home_banners = Event.query.filter_by(status=1).\
+                              filter_by(home_banner=1).\
+                              order_by(Event.id).\
+                              paginate(page, 
+                                      per_page=PER_PAGE,
+                                      error_out=True, 
+                                      max_per_page=None).items
   result = []
-  home_banners = Event.query.filter_by(
-      status=1).filter_by(home_banner=1).all()
-
   for banner in home_banners:
     data = {
         "index": banner.id,
@@ -94,7 +103,7 @@ def home_banner():
         "desc": banner.desc
     }
     result.append(data)
-  return render_template("home_banner.html", result=result)
+  return render_template("home.html", result=result)
 
 
 @app.route('/category_banner/<category>', methods=['GET'])
@@ -102,10 +111,16 @@ def category_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
 
+  page = request.args.get('page', 1, type=int)
+  category_banners = Event.query.filter_by(status=1).\
+                                  filter_by(category_banner=1).\
+                                  filter_by(category=category).\
+                                  order_by(Event.id).\
+                                  paginate(page, 
+                                          per_page=PER_PAGE,
+                                          error_out=True, 
+                                          max_per_page=None).items
   result = []
-  category_banners = Event.query.filter_by(
-      status=1).filter_by(category_banner=1).filter_by(category=category).all()
-
   for banner in category_banners:
     data = {
         "index": banner.id,
@@ -116,20 +131,15 @@ def category_banner(category):
         "desc": banner.desc
     }
     result.append(data)
-  if category == 'music':
-    return render_template("music.html", result=result)
-  if category == 'visual_art':
-    return render_template("visual_art.html", result=result)
-  if category == 'market':
-    return render_template("market.html", result=result)
-  if category == 'theater':
-    return render_template("theater.html", result=result)
+
+  for category in CATEGORY_DB:
+    return render_template(category+".html", result=result)
 
 @app.route('/api/banner', methods=['GET'])
 def banner():
-  result = []
   all_banners = Event.query.all()
 
+  result = []
   for banner in all_banners:
     data = {
         "index": banner.id,
@@ -144,9 +154,9 @@ def banner():
 
 @app.route('/api/home_banner', methods=['GET'])
 def get_home_banner():
-  result = []
   home_banners = Event.query.filter_by(status=1).filter_by(home_banner=1).all()
-
+  
+  result = []
   for banner in home_banners:
     data = {
         "index": banner.id,
@@ -165,10 +175,10 @@ def get_category_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
 
-  result = []
   category_banners = Event.query.filter_by(
       status=1).filter_by(category_banner=1).filter_by(category=category).all()
 
+  result = []
   for banner in category_banners:
     data = {
         "index": banner.id,
@@ -181,13 +191,14 @@ def get_category_banner(category):
     result.append(data)
   return jsonify(result)
 
+#update event
 @app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
 def each_event(id):
   event = Event.query.filter_by(id=id).first()
-  if request.method == 'GET':
 
-    result = []
+  if request.method == 'GET':
     event_category = event.category
+    result = []
     data = {
         "index": event.id,
         "img": event.img,
@@ -233,7 +244,7 @@ def each_event(id):
     event.category_banner = request.json['category_banner']
 
     db.session.commit()
-    return 'database is update success.'
+  return "update success!"
 
 @app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def get_events(category, year, month, day):
@@ -247,7 +258,6 @@ def get_events(category, year, month, day):
     print(n)
     return 'The date is not correct.', 400
 
-  result = []
   url_end_date = url_start_date + timedelta(days=7)
   events = Event.query.\
       filter_by(category=category).\
@@ -255,6 +265,7 @@ def get_events(category, year, month, day):
       filter(Event.start_date <= url_end_date).\
       all()
   
+  result = []
   for event in events:
     data = {
       "img": event.img,
@@ -278,9 +289,9 @@ def get_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
 
-  result = []
   event_banners = Event.query.filter_by(category=category).all()
 
+  result = []
   for banner in event_banners:
     data = {
       "index": banner.id,
@@ -331,8 +342,8 @@ def create_event():
 
   if request.method == 'GET':
     all_events = Event.query.all()
-    result = []
 
+    result = []
     for event in all_events:
       event_category = event.category
       data = {
@@ -365,4 +376,4 @@ def create_event():
     return jsonify(result)      
 
 if __name__ == '__main__':
-    app.run(port='5002', debug=True)
+    app.run(port='5002')

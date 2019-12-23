@@ -1,0 +1,27 @@
+html, body, .container-fluid, .row {
+      height: 100%;
+    }
+    .sidebar_position {
+      padding-left: 15%; 
+      font-size:1.1em;
+    }
+    .sidebar_active {
+      background-color: #F1F1F1;
+      color: black;
+    }
+
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .no_scroll {
+      position: fixed;
+    }
+    a {
+      color: white;
+    }
+    a:hover {
+      background-color: grey;
+      color: white;
+    }
