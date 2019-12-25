@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template, \
-current_app, url_for, redirect, flash
+                  current_app, url_for, redirect, flash
 from datetime import date, timedelta, datetime
 from enum import Enum
 
@@ -33,8 +33,7 @@ def event():
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
   pagination = Event.query.filter_by(status=1).order_by(Event.id).\
-      paginate(page, per_page=PER_PAGE, error_out=True,
-               max_per_page=None)
+      paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
   return render_template("all_banner.html", 
                           result=data('banners', all_banners), 
@@ -126,7 +125,7 @@ def get_banner(category):
   event_banners = Event.query.filter_by(category=category).all()
   if event_banners == None:
       return {}
-  result = data('banner', event_banners)
+  result = data('banners', event_banners)
   return jsonify(result)
 
 
@@ -158,9 +157,9 @@ def each_event(id):
     event.category_banner = request.json['category_banner']
 
     db.session.commit()
-  return "update success!"
+    return jsonify({'result': 'success', 'event_index': event.id})
 
-
+#create event
 @app.route('/api/event', methods=['GET', 'POST'])
 def create_event():
   if request.method == 'POST':

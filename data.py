@@ -73,4 +73,6 @@ def data(data_type, all_data):
                         each_data.desc,
                         )
                     )
+  else:
+    return 'Wrong data type.'
   return result

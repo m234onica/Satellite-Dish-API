@@ -24,162 +24,161 @@
       </tr>
     </thead>
     {% for event in result %}
-    
-    <tr>
-      <td>{{ event.index }}</td>
-      <td style="width: 20%;">{{ event.title }}</td>
-      <td>{{ event.category }}</td>
-      <td>{{ event.date.start }}</td>
-      <td class="text-center" style="width: 30%;">{{ event.desc }}</td>
-      {% if event.status == true %}
-        <td class="center text-success">
-          Accept
-        </td>
-      {% elif event.status == false%}
-        <td class="center text-danger">
-          Reject
-        </td>
-      {% elif event.status == None %}
+      <tr>
+        <td>{{ event.index }}</td>
+        <td style="width: 20%;">{{ event.title }}</td>
+        <td>{{ event.category }}</td>
+        <td>{{ event.date.start }}</td>
+        <td class="text-center" style="width: 30%;">{{ event.desc }}</td>
+        {% if event.status == true %}
+          <td class="center text-success">
+            Accept
+          </td>
+        {% elif event.status == false%}
+          <td class="center text-danger">
+            Reject
+          </td>
+        {% elif event.status == None %}
+          <td >
+            Review
+          </td>
+        {% endif %}
         <td >
-          Review
+          <button type="button" class="event_detail_button btn btn-link">
+            <i class="far fa-edit" 
+              style='font-size:20px;' 
+              data-id="{{ event.index }}" 
+              data-toggle="modal" 
+              data-target="#event-detail"></i>
+          </button>
         </td>
-      {% endif %}
-      <td >
-        <button type="button" class="event_detail_button btn btn-link">
-          <i class="far fa-edit" 
-            style='font-size:20px;' 
-            data-id="{{ event.index }}" 
-            data-toggle="modal" 
-            data-target="#event-detail"></i>
-        </button>
-      </i>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+      </tr>
+    {% endfor %}
+  </table>
 
-<div id="event-detail" class="modal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title">Event detail page</h2>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <img class="center" id="eventImage" src='' width="70%" /><br>
-          </div>
 
-          <div class="form-group">
-            <label><b>Index</b></label>
-            <input class="form-control" id="eventIndex" type="text" disabled>
-          </div>
+  <div id="event-detail" class="modal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Event detail page</h2>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <img class="center" id="eventImage" src='' width="70%" /><br>
+            </div>
 
-          <div class="form-group">
-            <label><b>Title</b></label>
-            <input class="form-control" id="eventTitle" type="text">
-          </div>
+            <div class="form-group">
+              <label><b>Index</b></label>
+              <input class="form-control" id="eventIndex" type="text" disabled>
+            </div>
 
-          <div class="form-group">
-            <label><b>Category</b></label><br>
-            <select class="form-control" name='option' id="eventCategory">
-              <option value="music">獨立音樂</option>
-              <option value="visual_art">視覺藝術</option>
-              <option value="market">市集</option>
-              <option value="theater">劇場</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label><b>Title</b></label>
+              <input class="form-control" id="eventTitle" type="text">
+            </div>
 
-          <div class="form-group">
-            <label><b>Link</b></label>
-            <input class="form-control" id="eventLink" type="text">
-          </div>
+            <div class="form-group">
+              <label><b>Category</b></label><br>
+              <select class="form-control" name='option' id="eventCategory">
+                <option value="music">獨立音樂</option>
+                <option value="visual_art">視覺藝術</option>
+                <option value="market">市集</option>
+                <option value="theater">劇場</option>
+              </select>
+            </div>
 
-          <div class="form-group">
-            <label><b>Start Date</b></label>
-            <input class="form-control" id="eventStart" type="date">
-          </div>
-          <div class="form-group">
-            <label><b>End Date</b></label>
-            <input class="form-control" id="eventEnd" type="date">
-          </div>
+            <div class="form-group">
+              <label><b>Link</b></label>
+              <input class="form-control" id="eventLink" type="text">
+            </div>
 
-          <div class="form-group">
-            <label><b>Display Date</b></label>
-            <textarea class="form-control" id="eventDisplay" rows='2'></textarea>
-          </div>
+            <div class="form-group">
+              <label><b>Start Date</b></label>
+              <input class="form-control" id="eventStart" type="date">
+            </div>
+            <div class="form-group">
+              <label><b>End Date</b></label>
+              <input class="form-control" id="eventEnd" type="date">
+            </div>
 
-          <div class="form-group">
-            <label><b>Note</b></label>
-            <textarea class="form-control" id="eventNote" rows='2'></textarea>
-          </div>
+            <div class="form-group">
+              <label><b>Display Date</b></label>
+              <textarea class="form-control" id="eventDisplay" rows='2'></textarea>
+            </div>
 
-          <div class="form-group">
-            <label><b>Address</b></label>
-            <input class="form-control" id="eventAddress" type="text">
-          </div>
+            <div class="form-group">
+              <label><b>Note</b></label>
+              <textarea class="form-control" id="eventNote" rows='2'></textarea>
+            </div>
 
-          <div class="form-group">
-            <label><b>Description</b></label>
-            <textarea class="form-control" id="eventDesc" rows='3'></textarea>
-          </div>
+            <div class="form-group">
+              <label><b>Address</b></label>
+              <input class="form-control" id="eventAddress" type="text">
+            </div>
 
-          <div class="form-group">  
-            <label><b>Region</b></label>
-            <select class="form-control" name='option' id="eventRegion">
-              <option value="">無</option>
-              <option value="北部">北部</option>
-              <option value="中部">中部</option>
-              <option value="南部">南部</option>
-              <option value="東部">東部</option>
-            </select>
-          </div>
+            <div class="form-group">
+              <label><b>Description</b></label>
+              <textarea class="form-control" id="eventDesc" rows='3'></textarea>
+            </div>
 
-          <div class="form-group">
-            <label><b>Reporter Name</b></label>
-            <input class="form-control" id="eventReporterName" type="text" disabled>
-          </div>
-          <div class="form-group">  
-            <label><b>Reporter Email</b></label>
-            <input class="form-control" id="eventReporterEmail" type="text" disabled>
-          </div>
+            <div class="form-group">  
+              <label><b>Region</b></label>
+              <select class="form-control" name='option' id="eventRegion">
+                <option value="">無</option>
+                <option value="北部">北部</option>
+                <option value="中部">中部</option>
+                <option value="南部">南部</option>
+                <option value="東部">東部</option>
+              </select>
+            </div>
 
-          <div class="form-group">  
-            <label><b>Reporter Phone</b></label>
-            <input class="form-control" id="eventReporterPhone" type="text" disabled>
-          </div>
+            <div class="form-group">
+              <label><b>Reporter Name</b></label>
+              <input class="form-control" id="eventReporterName" type="text" disabled>
+            </div>
+            <div class="form-group">  
+              <label><b>Reporter Email</b></label>
+              <input class="form-control" id="eventReporterEmail" type="text" disabled>
+            </div>
 
-          <label><b>Show on banner?</b><br></label>
-          <div class="form-group form-check">
-            <input class="form-check-input" id="eventHomeBanner" type="checkbox"> Home banner <br>
-            <input class="form-check-input" id="eventCategoryBanner" type="checkbox"> Category banner <br>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" 
-                data-dismiss="modal"
-                onclick="get_event()"
-                class="reject_button btn btn-danger shadow mb-4 ">
-                Reject
-        </button>
-        <button type="button" 
-                style="margin:5px;"
-                data-dismiss="modal"
-                class="button right btn btn-secondary shadow mb-4 ">
-                Cancel
-        </button>
-        <button type="button" 
-                data-dismiss="modal"
-                onclick="get_event()"
-                class="accept_button btn btn-info shadow mb-4 ">
-                Accept
-        </button>
+            <div class="form-group">  
+              <label><b>Reporter Phone</b></label>
+              <input class="form-control" id="eventReporterPhone" type="text" disabled>
+            </div>
+
+            <label><b>Show on banner?</b><br></label>
+            <div class="form-group form-check">
+              <input class="form-check-input" id="eventHomeBanner" type="checkbox"> Home banner <br>
+              <input class="form-check-input" id="eventCategoryBanner" type="checkbox"> Category banner <br>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" 
+                  data-dismiss="modal"
+                  onclick="get_event()"
+                  class="reject_button btn btn-danger shadow mb-4 ">
+                  Reject
+          </button>
+          <button type="button" 
+                  style="margin:5px;"
+                  data-dismiss="modal"
+                  class="button right btn btn-secondary shadow mb-4 ">
+                  Cancel
+          </button>
+          <button type="button" 
+                  data-dismiss="modal"
+                  onclick="get_event()"
+                  class="accept_button btn btn-info shadow mb-4 ">
+                  Accept
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script type=text/javascript src="{{ url_for('static', filename='event.js') }}"></script> 
- 
+<script type=text/javascript src="{{ url_for('static', filename='ajax.js') }}"></script> 
+
 {% endblock content %}

@@ -25,12 +25,14 @@
       <td style="width: 25%;">{{ event.desc }}</td>
       <td style="width: 25%;">{{event.display_date}}</td>
       <td style="width: 25%;">{{event.address}}</td>
-      <td class="text-center">
-        <i class='fas fa-image banner_image_button' 
-          data-id="{{ event.index }}"
-          data-toggle="modal" 
-          data-target="#image_modal">
-        </i>
+      <td>
+        <button type="button" class="event_detail_button btn btn-link text-center">
+          <i class='fas fa-image banner_image_button' 
+            data-id="{{ event.index }}"
+            data-toggle="modal" 
+            data-target="#image_modal">
+          </i>
+        </button>
       </td>
     </tr>
     {% endfor %}
@@ -39,9 +41,9 @@
 <div id="image_modal" class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
-      <img id="bannerImage" src="" style="height: 90%; width: 100%">
+      <img id="bannerImage" class="img-fluid" src="" style="width: 100%">
     </div>
   </div>
 </div>
-<script type=text/javascript src="{{ url_for('static', filename='event.js') }}"></script>
+<script type=text/javascript src="{{ url_for('static', filename='ajax.js') }}"></script>
 
