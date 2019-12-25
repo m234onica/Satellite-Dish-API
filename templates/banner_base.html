@@ -25,9 +25,8 @@
       <td style="width: 25%;">{{ event.desc }}</td>
       <td style="width: 25%;">{{event.display_date}}</td>
       <td style="width: 25%;">{{event.address}}</td>
-      <td>
+      <td class="text-center">
         <i class='fas fa-image banner_image_button' 
-          style='font-size:20px;' 
           data-id="{{ event.index }}"
           data-toggle="modal" 
           data-target="#image_modal">
@@ -38,23 +37,11 @@
     
 </table>
 <div id="image_modal" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
-      <img id="bannerImage" src="" style="height: 90%;">
+      <img id="bannerImage" src="" style="height: 90%; width: 100%">
     </div>
   </div>
 </div>
+<script type=text/javascript src="{{ url_for('static', filename='event.js') }}"></script>
 
-<script type=text/javascript> $('#banner-list').on('click', '.banner_image_button' , e=> {
-          e.preventDefault();
-          var eventId = e.target.dataset.id;
-          $.ajax({
-            type: "GET",
-            url: "/api/event/" + eventId,
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8',
-          }).done(function (data) {
-            $('#bannerImage').attr('src', data[0].img)
-          })
-      })
-    </script>
