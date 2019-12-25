@@ -5,7 +5,7 @@
   <div class="header m-3 pb-5">
     <h1>Event List</h1>
   </div>
-  
+
   <div>
     {%import 'page.html' as pg%}
     {{pg.my_paginate(pagination,'event')}}
@@ -45,10 +45,13 @@
         </td>
       {% endif %}
       <td >
-        <i class='fas fa-eye event_detail_button' 
-        style='font-size:20px;' 
-        data-id="{{ event.index }}" 
-        data-toggle="modal" data-target="#event-detail">
+        <button type="button" class="event_detail_button btn btn-link">
+          <i class="far fa-edit" 
+            style='font-size:20px;' 
+            data-id="{{ event.index }}" 
+            data-toggle="modal" 
+            data-target="#event-detail"></i>
+        </button>
       </i>
     </td>
   </tr>
