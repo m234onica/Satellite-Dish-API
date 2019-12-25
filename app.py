@@ -5,9 +5,9 @@ from enum import Enum
 
 from init import create_app, db
 from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
-from models import Event, category_Enum
-from storage import decode_and_get_url
-from data import data
+from models.model import Event, category_Enum
+from tools.storage import decode_and_get_url
+from tools.data import data
 import json
 
 app = create_app()
