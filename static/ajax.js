@@ -86,7 +86,7 @@ $('.accept_button').click(function () {
     contentType: 'application/json; charset=utf-8',
     data: form,
   }).done(function (data) {
-    // window.location.reload()    
+    window.location.reload()    
   })
 })
 
@@ -118,7 +118,7 @@ $('.reject_button').click(function () {
     contentType: 'application/json; charset=utf-8',
     data: form,
   }).done(function(data) {
-    // window.location.reload()
+    window.location.reload()
   })
 })
 
