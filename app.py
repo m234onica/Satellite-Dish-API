@@ -32,8 +32,7 @@ def event():
 @app.route('/banner')
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).\
-      filter_by(home_banner=0).filter_by (category_banner=1).order_by(Event.id).\
+  pagination = Event.query.filter_by(show_banner=1).order_by(Event.id).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
   return render_template("all_banner.html", 
@@ -71,7 +70,7 @@ def category_banner(category):
 #api for front-end
 @app.route('/api/banner', methods=['GET'])
 def banner():
-  all_banners = Event.query.all()
+  all_banners = Event.query.filter_by(show_banner=1).all()
   result = data('banners', all_banners)
   return jsonify(result)
 
@@ -155,6 +154,7 @@ def each_event(id):
     event.status = request.json['status']
     event.home_banner = request.json['home_banner']
     event.category_banner = request.json['category_banner']
+    event.show_banner = request.json['show_banner']
 
     db.session.commit()
     return jsonify({'result': 'success', 'event_index': event.id})
@@ -180,8 +180,9 @@ def create_event():
       reporter_email=request.json['reporter_email'],
       reporter_phone=request.json['reporter_phone'],
       status=None,
-      home_banner=None,
-      category_banner=None
+      home_banner=False,
+      category_banner=False,
+      show_banner=False
       )
     
     db.session.add(new_event)

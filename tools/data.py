@@ -22,7 +22,9 @@ def data(data_type, all_data):
                         all_data.reporter_phone,
                         all_data.status,
                         all_data.home_banner,
-                        all_data.category_banner)
+                        all_data.category_banner,
+                        all_data.show_banner
+                        )
                   )
 
   elif data_type == 'events':
@@ -46,6 +48,7 @@ def data(data_type, all_data):
                         each_data.status,
                         each_data.home_banner,
                         each_data.category_banner,
+                        each_data.show_banner
                         )
                     )
 

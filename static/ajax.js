@@ -55,19 +55,27 @@ $('.accept_button').click(function () {
     'region': $('#eventRegion').val(),
     'category': $('#eventCategory').val(),
     'home_banner': false,
-    'category_banner': false
+    'category_banner': false,
+    'show_banner': false
   }
   
   if ($("#eventHomeBanner").prop('checked')) {
-    Data.home_banner = true
+    Data.home_banner = true;
+    Data.show_banner = true;
   } else {
-    Data.home_banner = false
+    Data.home_banner = false;
   }
   
   if ($("#eventCategoryBanner").prop('checked')) {
     Data.category_banner = true
   } else {
     Data.category_banner = false
+  }
+
+  if (Data.category_banner == true || Data.home_banner == true ){
+    Data.show_banner = true;
+  } else{
+    Data.show_banner = false;
   }
   
   form = JSON.stringify(Data)
@@ -78,9 +86,7 @@ $('.accept_button').click(function () {
     contentType: 'application/json; charset=utf-8',
     data: form,
   }).done(function (data) {
-    window.location.reload()
-    $("event-list").load("/event.html");
-    
+    // window.location.reload()    
   })
 })
 
@@ -100,7 +106,8 @@ $('.reject_button').click(function () {
     'region': $('#eventRegion').val(),
     'category': $('#eventCategory').val(),
     'home_banner': false,
-    'category_banner': false
+    'category_banner': false,
+    'show_banner': false
   }
   form = JSON.stringify(Data)
 
@@ -111,7 +118,7 @@ $('.reject_button').click(function () {
     contentType: 'application/json; charset=utf-8',
     data: form,
   }).done(function(data) {
-    window.location.reload()
+    // window.location.reload()
   })
 })
 

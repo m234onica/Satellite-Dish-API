@@ -16,8 +16,9 @@
 --   reporter_email  VARCHAR(50)   NOT NULL,
 --   reporter_phone  VARCHAR(20)   NOT NULL    UNIQUE,
 --   region          VARCHAR(10),
---   home_banner     boolean,
---   category_banner boolean,
+--   home_banner     boolean                   DEFAULT 0,
+--   category_banner boolean                   DEFAULT 0,
+--   show_banner     boolean                   DEFAULT 0,
 --   status          boolean,
 --   PRIMARY KEY( id )
 -- );
