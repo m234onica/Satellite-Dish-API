@@ -32,9 +32,11 @@ def event():
 @app.route('/banner')
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).order_by(Event.id).\
+  pagination = Event.query.filter_by(status=1).\
+      filter_by(home_banner=0).filter_by (category_banner=1).order_by(Event.id).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
+  print(all_banners)
   return render_template("all_banner.html", 
                           result=data('banners', all_banners), 
                           pagination=pagination)
@@ -58,7 +60,7 @@ def category_banner(category):
 
   page = request.args.get('page', 1, type=int)
   pagination = Event.query.filter_by(status=1).\
-                  filter_by(category_banner=1). filter_by(category=category). order_by(Event.id).\
+                  filter_by(category_banner=1).filter_by(category=category).order_by(Event.id).\
                   paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   category_banners = pagination.items
 

@@ -45,7 +45,7 @@
         {% endif %}
         <td >
           <button type="button" class="event_detail_button btn btn-link">
-            <i class="far fa-edit" 
+            <i class="far fa-edit detail_icon" 
               style='font-size:20px;' 
               data-id="{{ event.index }}" 
               data-toggle="modal" 
@@ -158,19 +158,17 @@
         <div class="modal-footer">
           <button type="button" 
                   data-dismiss="modal"
-                  onclick="get_event()"
                   class="reject_button btn btn-danger shadow mb-4 ">
                   Reject
           </button>
           <button type="button" 
                   style="margin:5px;"
                   data-dismiss="modal"
-                  class="button right btn btn-secondary shadow mb-4 ">
+                  class="button btn btn-secondary shadow mb-4 ">
                   Cancel
           </button>
           <button type="button" 
                   data-dismiss="modal"
-                  onclick="get_event()"
                   class="accept_button btn btn-info shadow mb-4 ">
                   Accept
           </button>
