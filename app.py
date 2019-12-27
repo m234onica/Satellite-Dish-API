@@ -36,7 +36,6 @@ def get_all_banner():
       filter_by(home_banner=0).filter_by (category_banner=1).order_by(Event.id).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
-  print(all_banners)
   return render_template("all_banner.html", 
                           result=data('banners', all_banners), 
                           pagination=pagination)
@@ -64,10 +63,9 @@ def category_banner(category):
                   paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   category_banners = pagination.items
 
-  for category in CATEGORY_DB:
-    return render_template(category+".html", 
-                            result=data('banners', category_banners), 
-                            pagination=pagination)
+  return render_template(category+".html", 
+                          result=data('banners', category_banners), 
+                          pagination=pagination)
 
 
 #api for front-end

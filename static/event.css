@@ -5,7 +5,7 @@ html, body, .container-fluid, .row {
   padding-left: 15%; 
   font-size:1.1em;
 }
-.customized_active {
+nav .customized_active {
   background-color: #F1F1F1;
   color: black;
 }

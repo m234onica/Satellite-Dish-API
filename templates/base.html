@@ -10,8 +10,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
-      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='event.css') }}">
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -24,9 +24,9 @@
       <div class="col-2 bg-dark text-light" style="padding-right: 0px;">
         <nav class="nav flex-column nav-pills no_scroll" id="sidebar" role="tablist">
 
-          <h2  class="nav-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
+          <h2 class="nav-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
 
-          <a href="/event" id="v-pills-event" 
+          <a href="/event" id="v-pills-event"
             class="nav-link {{ 'customized_active' if active_page == 'event' else '' }}"
             style="font-size:1.2em">Event</a>
           <a href="/banner" id="v-pills-banner"
@@ -53,9 +53,8 @@
         <div class="tab-content" id="v-pills-tabContent">
           <div class="tab-pane fade show active" id="v-pills-page" role="tabpanel">
             <div class="header  m-3 pb-5">
-
-              {% block active_page %}{% endblock  %}
               {% block content %}{% endblock content %}
+              {% block banner_body %}{% endblock banner_body %}
             </div>
           </div>
         </div>
