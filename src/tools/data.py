@@ -1,4 +1,4 @@
-from tools.structure import filter_events, event, banner
+from src.tools.structure import filter_events, event, banner
 
 def data(data_type, all_data):
   result = []

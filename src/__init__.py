@@ -3,11 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+from src.route.cms import cms
+from src.route.api import api
+
+
 def create_app():
   app = Flask(__name__)
-  app.config.from_object('config.Config')
+  app.config.from_object('config')
 
+  app.register_blueprint(cms)
+  app.register_blueprint(api)
   db.init_app(app)
-  # db.create_all()
+
   return app
-  

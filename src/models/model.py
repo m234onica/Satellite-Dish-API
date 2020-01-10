@@ -1,4 +1,4 @@
-from init import db
+from src import db
 from datetime import datetime
 import enum
 
@@ -34,29 +34,7 @@ class Event(db.Model):
   home_banner = db.Column(db.Boolean, nullable=True, default=False)
   category_banner = db.Column(db.Boolean, nullable=True, default=False)
   show_banner = db.Column(db.Boolean, nullable=True, default=False)
-
-  def __init__(self, img, title, link, desc, region, 
-              created_at, start_date, end_date, display_date, 
-              location, note, category, reporter_name, reporter_email, reporter_phone, 
-               status, home_banner, category_banner, show_banner):
-    self.img = img
-    self.title = title
-    self.link = link
-    self.desc = desc
-    self.created_at = datetime.now()
-    self.start_date = start_date
-    self.end_date =end_date
-    self.display_date = display_date
-    self.location = location
-    self.note = note
-    self.category = category
-    self.reporter_name = reporter_name
-    self.reporter_email = reporter_email
-    self.reporter_phone = reporter_phone
-    self.status = status
-    self.home_banner = home_banner
-    self.category_banner = category_banner
-    self.show_banner = show_banner
+  
 
   def __repr__(self):
         return "Events('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(

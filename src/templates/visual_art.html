@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% set active_page = "all" %}
+{% set active_page = "visual_art" %}
 
 {% block banner_body %}
-<h1>All Banner List</h1>
+<h1>Visual Art Banner List</h1>
 <div>
   {%import 'page.html' as pg%}
-  {{pg.my_paginate(pagination,'get_all_banner', "null")}}
+  {{pg.my_paginate(pagination,'cms.category_banner', 'visual_art')}}
 </div>
 {% include 'banner_base.html' %}
 {% endblock banner_body %}

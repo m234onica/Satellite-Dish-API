@@ -1,88 +1,34 @@
-from flask import Flask, request, jsonify, render_template, \
-                  current_app, url_for, redirect, flash
+from flask import (Flask, request, jsonify, render_template, Blueprint,
+                  current_app, url_for, redirect)
+
 from datetime import date, timedelta, datetime
 from enum import Enum
 
-from init import create_app, db
+from src import db
+from src.tools.data import data
+from src.tools.storage import decode_and_get_url
+from src.models.model import Event, category_Enum
 from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
-from models.model import Event, category_Enum
-from tools.storage import decode_and_get_url
-from tools.data import data
-import json
-
-app = create_app()
-
-#Backstage management
-@app.route('/')
-def index():
-  return redirect(url_for('event'))
 
 
-@app.route('/event', methods=['GET'])
-def event():
-  page = request.args.get('page', 1, type=int)
-  pagination = Event.query.order_by(Event.start_date.asc()).\
-      paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
-  all_events = pagination.items
-  return render_template("event.html", 
-                          result=data('events', all_events), 
-                          pagination=pagination)
+api = Blueprint('api', __name__)
 
 
-@app.route('/banner')
-def get_all_banner():
-  page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(show_banner=1).order_by(Event.id).\
-      paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
-  all_banners = pagination.items
-  return render_template("all_banner.html", 
-                          result=data('banners', all_banners), 
-                          pagination=pagination)
-
-
-@app.route('/home_banner', methods=['GET'])
-def home_banner():
-  page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).filter_by(home_banner=1).order_by(Event.id).\
-                  paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
-  home_banners = pagination.items
-  return render_template("home.html", 
-                          result=data('banners', home_banners), 
-                          pagination=pagination)
-
-
-@app.route('/category_banner/<category>', methods=['GET'])
-def category_banner(category):
-  if category not in CATEGORY_DB:
-    return 'Category is not found.', 400
-
-  page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).\
-                  filter_by(category_banner=1).filter_by(category=category).order_by(Event.id).\
-                  paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
-  category_banners = pagination.items
-
-  return render_template(category+".html", 
-                          result=data('banners', category_banners), 
-                         pagination=pagination, category=category)
-
-
-#api for front-end
-@app.route('/api/banner', methods=['GET'])
+@api.route('/api/banner', methods=['GET'])
 def banner():
   all_banners = Event.query.filter_by(show_banner=1).all()
   result = data('banners', all_banners)
   return jsonify(result)
 
 
-@app.route('/api/home_banner', methods=['GET'])
+@api.route('/api/home_banner', methods=['GET'])
 def get_home_banner():
   home_banners = Event.query.filter_by(status=1).filter_by(home_banner=1).all()
   result = data('banners', home_banners)
   return jsonify(result)
 
 
-@app.route('/api/category_banner/<category>', methods=['GET'])
+@api.route('/api/category_banner/<category>', methods=['GET'])
 def get_category_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
@@ -93,7 +39,7 @@ def get_category_banner(category):
   return jsonify(result)
 
 
-@app.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
+@api.route('/api/events/<category>/<int:year>/<int:month>/<int:day>', methods=['GET'])
 def filter_events(category, year, month, day):
 
   if category not in CATEGORY_DB:
@@ -116,7 +62,7 @@ def filter_events(category, year, month, day):
   return jsonify(result)
 
 
-@app.route('/api/<category>/banner', methods=['GET'])
+@api.route('/api/<category>/banner', methods=['GET'])
 def get_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
@@ -129,7 +75,7 @@ def get_banner(category):
 
 
 #update event
-@app.route('/api/event/<int:id>', methods=['GET', 'PUT'])
+@api.route('/api/event/<int:id>', methods=['GET', 'PUT'])
 def each_event(id):
   event = Event.query.filter_by(id=id).first()
 
@@ -160,7 +106,7 @@ def each_event(id):
     return jsonify({'result': 'success', 'event_index': event.id})
 
 #create event
-@app.route('/api/event', methods=['GET', 'POST'])
+@api.route('/api/event', methods=['GET', 'POST'])
 def create_event():
   if request.method == 'POST':
     new_event = Event(
@@ -199,6 +145,3 @@ def create_event():
     all_events = Event.query.all()
     result = data('events', all_events)
     return jsonify(result)      
-
-if __name__ == '__main__':
-    app.run(port='5002')
