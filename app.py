@@ -64,7 +64,7 @@ def category_banner(category):
 
   return render_template(category+".html", 
                           result=data('banners', category_banners), 
-                          pagination=pagination)
+                         pagination=pagination, category=category)
 
 
 #api for front-end

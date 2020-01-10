@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% set active_page = "market" %}
+
 {% block banner_body %}
 <h1>Market Banner List</h1>
+  <div>
+    {%import 'page.html' as pg%}
+    {{pg.my_paginate(pagination,'category_banner', 'market')}}
+  </div>
 {% include 'banner_base.html' %}
 {% endblock banner_body %}

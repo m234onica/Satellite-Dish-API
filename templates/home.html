@@ -2,5 +2,9 @@
 {% set active_page = "home" %}
 {% block banner_body %}
 <h1>Home Banner List</h1>
+<div>
+  {%import 'page.html' as pg%}
+  {{pg.my_paginate(pagination,'home_banner', 'null')}}
+</div>
 {% include 'banner_base.html' %}
 {% endblock banner_body %}
