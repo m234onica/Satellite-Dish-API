@@ -35,7 +35,7 @@ def get_all_banner():
   pagination = Event.query.filter_by(show_banner=1).order_by(Event.id).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
-  return render_template("banner/all_banner.html",
+  return render_template("banners/all.html",
                          result=data('banners', all_banners),
                          pagination=pagination)
 
@@ -46,7 +46,7 @@ def home_banner():
   pagination = Event.query.filter_by(status=1).filter_by(home_banner=1).order_by(Event.id).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   home_banners = pagination.items
-  return render_template("banner/home.html",
+  return render_template("banners/home.html",
                          result=data('banners', home_banners),
                          pagination=pagination)
 
@@ -62,6 +62,6 @@ def category_banner(category):
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   category_banners = pagination.items
 
-  return render_template("banner/" + category + ".html",
+  return render_template("banners/" + category + ".html",
                          result=data('banners', category_banners),
                          pagination=pagination, category=category)
