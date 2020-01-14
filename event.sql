@@ -13,7 +13,7 @@ CREATE TABLE events (
   category        ENUM("music", "visual_art", "market", "theater") NOT NULL,
   reporter_name   VARCHAR(20)   NOT NULL,
   reporter_email  VARCHAR(50)   NOT NULL,
-  reporter_phone  VARCHAR(20)   NOT NULL    UNIQUE,
+  reporter_phone  VARCHAR(20)   NOT NULL,
   region          VARCHAR(10),
   home_banner     boolean                   DEFAULT 0,
   category_banner boolean                   DEFAULT 0,
