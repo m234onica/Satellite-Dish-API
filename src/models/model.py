@@ -15,7 +15,7 @@ class Event(db.Model):
   img = db.Column(db.String(100), nullable=False)
   title = db.Column(db.String(50), nullable=False)
   link = db.Column(db.String(100), nullable=False)
-  desc = db.Column(db.String, nullable=False)
+  description = db.Column(db.String, nullable=False)
   
   created_at = db.Column(db.DateTime, default=datetime.now())
   start_date = db.Column(db.Date, nullable=False)
@@ -41,7 +41,7 @@ class Event(db.Model):
             self.img,
             self.title,
             self.link,
-            self.desc,
+            self.description,
             self.region,
             self.created_at,
             self.start_date,

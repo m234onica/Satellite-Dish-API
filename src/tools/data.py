@@ -16,7 +16,7 @@ def data(data_type, all_data):
                         all_data.note,
                         all_data.location,
                         all_data.link,
-                        all_data.desc,
+                        all_data.description,
                         all_data.reporter_name,
                         all_data.reporter_email,
                         all_data.reporter_phone,
@@ -41,7 +41,7 @@ def data(data_type, all_data):
                         each_data.note,
                         each_data.location,
                         each_data.link,
-                        each_data.desc,
+                        each_data.description,
                         each_data.reporter_name,
                         each_data.reporter_email,
                         each_data.reporter_phone,
@@ -62,7 +62,7 @@ def data(data_type, all_data):
                         each_data.display_date,
                         each_data.location,
                         each_data.link,
-                        each_data.desc,
+                        each_data.description,
                         )
                     )
 
@@ -73,7 +73,7 @@ def data(data_type, all_data):
                         each_data.title,
                         each_data.display_date,
                         each_data.location,
-                        each_data.desc,
+                        each_data.description,
                         )
                     )
   else:
