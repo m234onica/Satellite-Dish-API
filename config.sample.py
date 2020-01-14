@@ -12,7 +12,7 @@ FLASK_ENV = os.environ.get('FLASK_ENV')
 
 DEBUG = True
 TEMPLATES_AUTO_RELOAD = True
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:rootroot@localhost/SatelliteDish'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:rootroot@localhost/SatelliteDish?charset=utf8mb4'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 JSON_AS_ASCII = False
 
