@@ -37,8 +37,8 @@ INSERT INTO events
   reporter_email,
   reporter_phone,
   region,
-  status,
-  )
+  status
+)
 VALUES
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -54,5 +54,5 @@ VALUES
   "linroex@coder.tw",
   "0930330321",
   "北部",
-  "0"
-  );
+  0
+);
