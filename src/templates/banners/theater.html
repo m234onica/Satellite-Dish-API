@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% set active_page = "theater" %}
+{% set active_page = "theatre" %}
 
 {% block banner_body %}
-<h1>Theater Banner List</h1>
+<h1>Theatre Banner List</h1>
 <div>
   {%import 'page.html' as pg%}
-  {{pg.my_paginate(pagination,'cms.category_banner', 'theater')}}
+  {{pg.my_paginate(pagination,'cms.category_banner', 'theatre')}}
 </div>
 {% include 'banners/base.html' %}
 {% endblock banner_body %}

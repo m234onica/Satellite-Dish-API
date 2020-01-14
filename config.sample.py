@@ -2,7 +2,7 @@ import os
 
 BUCKET_NAME = 'satellite-l5yx88bg3'
 
-CATEGORY_DB = ['music', 'visual_art', 'market', 'theater']
+CATEGORY_DB = ['music', 'visual_art', 'market', 'theatre']
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 PER_PAGE = 10
 

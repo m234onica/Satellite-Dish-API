@@ -7,7 +7,7 @@ class category_Enum(enum.Enum):
     music = 0
     visual_art = 1
     market = 2
-    theater = 3
+    theatre = 3
 
 class Event(db.Model):
   __tablename__ = 'events'

@@ -13,7 +13,7 @@ end_date        DATE          NOT NULL
 display_date    TEXT          NOT NULL
 location        TEXT          NOT NULL
 note            TEXT
-category        ENUM("music", "visual_art", "market", "theater") NOT NULL
+category        ENUM("music", "visual_art", "market", "theatre") NOT NULL
 reporter_name   VARCHAR(20)   NOT NULL
 reporter_email  VARCHAR(50)   NOT NULL
 reporter_phone  VARCHAR(20)   NOT NULL    UNIQUE
