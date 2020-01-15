@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Satellite Dish</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}">
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-2 bg-dark text-light" style="padding-right: 0px;">
+        <nav class="nav flex-column nav-pills no_scroll" id="sidebar" role="tablist">
+
+          <h2 class="nav-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
+
+          <a href="/event" id="v-pills-event"
+            class="nav-link {{ 'customized_active' if active_page == 'event' else '' }}"
+            style="font-size:1.2em">Event</a>
+          <a href="/banner" id="v-pills-banner"
+            class="nav-link {{ 'customized_active' if active_page == 'all' else '' }}"
+            style="font-size:1.2em">Banner&nbsp;<i class='fas fa-angle-down'></i></a>
+          <a href="/home_banner" id="v-pills-home"
+            class="nav-link sidebar_position {{ 'customized_active' if active_page == 'home' else '' }}">
+            Home</a>
+          <a href="/category_banner/music" id="v-pills-music"
+            class="nav-link sidebar_position {{ 'customized_active' if active_page == 'music' else '' }}">
+            Music</a>
+          <a href="/category_banner/visual_art" id="v-pills-visual-art"
+            class="nav-link sidebar_position {{ 'customized_active' if active_page == 'visual_art' else '' }}">
+            Visual Art</a>
+          <a href="/category_banner/market" id="v-pills-market"
+            class="nav-link sidebar_position {{ 'customized_active' if active_page == 'market' else '' }}">
+            Market</a>
+          <a href="/category_banner/theatre" id="v-pills-theatre"
+            class="nav-link sidebar_position {{ 'customized_active' if active_page == 'theatre' else '' }}">
+            Theatre</a>
+        </nav>
+      </div>
+      <div class="col-10">
+        <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="v-pills-page" role="tabpanel">
+            <div class="header  m-3 pb-5">
+              {% block content %}{% endblock content %}
+              {% block banner_body %}{% endblock banner_body %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

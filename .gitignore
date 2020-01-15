@@ -1,6 +1,4 @@
-
-/.*
-test*.py
-*.png
-/templates
+*.pyc
+__pycache__
+config.py
 .env

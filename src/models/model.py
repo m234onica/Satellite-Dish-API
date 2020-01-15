@@ -1,4 +1,4 @@
-from init import db
+from src import db
 from datetime import datetime
 import enum
 
@@ -7,7 +7,7 @@ class category_Enum(enum.Enum):
     music = 0
     visual_art = 1
     market = 2
-    theater = 3
+    theatre = 3
 
 class Event(db.Model):
   __tablename__ = 'events'
@@ -15,7 +15,7 @@ class Event(db.Model):
   img = db.Column(db.String(100), nullable=False)
   title = db.Column(db.String(50), nullable=False)
   link = db.Column(db.String(100), nullable=False)
-  desc = db.Column(db.String, nullable=False)
+  description = db.Column(db.String, nullable=False)
   
   created_at = db.Column(db.DateTime, default=datetime.now())
   start_date = db.Column(db.Date, nullable=False)
@@ -30,28 +30,18 @@ class Event(db.Model):
   reporter_email = db.Column(db.String(50), nullable=False)
   reporter_phone = db.Column(db.String(20), nullable=False, unique=True)
 
-  def __init__(self, img, title, link, desc, region, created_at, start_date, end_date, display_date, location, note, category, reporter_name, reporter_email, reporter_phone):
-    self.img = img
-    self.title = title
-    self.link = link
-    self.desc = desc
-    self.created_at = datetime.now()
-    self.start_date = start_date
-    self.end_date =end_date
-    self.display_date = display_date
-    self.location = location
-    self.note = note
-    self.category = category
-    self.reporter_name = reporter_name
-    self.reporter_email = reporter_email
-    self.reporter_phone = reporter_phone
+  status = db.Column(db.Boolean, nullable=True)
+  home_banner = db.Column(db.Boolean, nullable=True, default=False)
+  category_banner = db.Column(db.Boolean, nullable=True, default=False)
+  show_banner = db.Column(db.Boolean, nullable=True, default=False)
+  
 
   def __repr__(self):
-        return "Events('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+        return "Events('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
             self.img,
             self.title,
             self.link,
-            self.desc,
+            self.description,
             self.region,
             self.created_at,
             self.start_date,
@@ -62,18 +52,9 @@ class Event(db.Model):
             self.category,
             self.reporter_name,
             self.reporter_email,
-            self.reporter_phone
-        )
-
-class File(db.Model):
-  __tablename__ = 'files'
-  id = db.Column(db.Integer, primary_key=True)
-  img = db.Column(db.LargeBinary)
-  
-  def __init__(self, img):
-    self.img = img
-
-  def __repr__(self):
-        return "Files('{}')".format(
-          self.img
+            self.reporter_phone,
+            self.status,
+            self.home_banner,
+            self.category_banner,
+            self.show_banner
         )

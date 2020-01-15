@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% set active_page = "home" %}
+{% block banner_body %}
+<h1>Home Banner List</h1>
+<div>
+  {%import 'page.html' as pg%}
+  {{pg.my_paginate(pagination,'cms.home_banner', 'null')}}
+</div>
+{% include 'banners/base.html' %}
+{% endblock banner_body %}
