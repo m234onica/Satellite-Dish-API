@@ -15,7 +15,6 @@
 
   <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/event.css') }}">
   <link rel="shortcut icon" href="{{ url_for('static', filename='css/favicon.ico') }}">
-
 </head>
 
 <body>
@@ -26,25 +25,25 @@
 
           <h2 class="nav-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
 
-          <a href="/event" id="v-pills-event"
+          <a href="{{url}}/event" id="v-pills-event"
             class="nav-link {{ 'customized_active' if active_page == 'event' else '' }}"
             style="font-size:1.2em">Event</a>
-          <a href="/banner" id="v-pills-banner"
+          <a href="{{url}}/banner" id="v-pills-banner"
             class="nav-link {{ 'customized_active' if active_page == 'all' else '' }}"
             style="font-size:1.2em">Banner&nbsp;<i class='fas fa-angle-down'></i></a>
-          <a href="/home_banner" id="v-pills-home"
+          <a href="{{url}}/home_banner" id="v-pills-home"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'home' else '' }}">
             Home</a>
-          <a href="/category_banner/music" id="v-pills-music"
+          <a href="{{url}}/category_banner/music" id="v-pills-music"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'music' else '' }}">
             Music</a>
-          <a href="/category_banner/visual_art" id="v-pills-visual-art"
+          <a href="{{url}}/category_banner/visual_art" id="v-pills-visual-art"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'visual_art' else '' }}">
             Visual Art</a>
-          <a href="/category_banner/market" id="v-pills-market"
+          <a href="{{url}}/category_banner/market" id="v-pills-market"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'market' else '' }}">
             Market</a>
-          <a href="/category_banner/theatre" id="v-pills-theatre"
+          <a href="{{url}}/category_banner/theatre" id="v-pills-theatre"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'theatre' else '' }}">
             Theatre</a>
         </nav>

@@ -1,4 +1,4 @@
-from flask import (Flask, request, jsonify, render_template, Blueprint,
+from flask import (Flask, request, jsonify, render_template, Blueprint, g,
                    current_app, url_for, redirect)
 
 from datetime import date, datetime
@@ -8,25 +8,34 @@ from src import db
 from src.tools.data import data
 from src.tools.storage import decode_and_get_url
 from src.models.model import Event, category_Enum, db
-from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
+from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE, BASE_URL
 
 
 cms = Blueprint('cms', __name__)
 
+
+@cms.context_processor
+def url():
+  return {'url': g.url}
+
+
+@cms.before_request
+def before_req():
+  g.url = BASE_URL
+
 @cms.route('/')
 def index():
-  return redirect(url_for('cms.event'))
-
+  return redirect(url_for('cms.events'))
 
 @cms.route('/event', methods=['GET'])
-def event():
+def events():
   page = request.args.get('page', 1, type=int)
   pagination = Event.query.order_by(Event.start_date.asc()).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_events = pagination.items
   return render_template("event.html",
-                         result=data('events', all_events),
-                         pagination=pagination)
+                        result=data('events', all_events),
+                        pagination=pagination)
 
 
 @cms.route('/banner')
