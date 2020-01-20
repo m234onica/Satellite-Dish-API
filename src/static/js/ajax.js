@@ -4,7 +4,7 @@ $('.event_detail_button').click(function() {
   
   $.ajax({
     type: "GET",
-    url: "/api/event/" + eventId,
+    url: "api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
   }).done(function (data) {
@@ -81,7 +81,7 @@ $('.accept_button').click(function () {
   form = JSON.stringify(Data)
   $.ajax({
     type: "PUT",
-    url: "/api/event/" + eventId,
+    url: "api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
     data: form,
@@ -113,7 +113,7 @@ $('.reject_button').click(function () {
 
   $.ajax({
     type: "PUT",
-    url: "/api/event/" + eventId,
+    url: "api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
     data: form,
@@ -128,7 +128,7 @@ $('.banner_image_button').click(function() {
   
   $.ajax({
     type: "GET",
-    url: "/api/event/" + imageId,
+    url: "api/event/" + imageId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
   }).done(function (data) {
