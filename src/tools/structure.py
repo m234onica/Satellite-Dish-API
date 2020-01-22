@@ -1,4 +1,4 @@
-def event(id, img, title, category, region, start_date, end_date, display_date, note, location, link, desc, reporter_name, reporter_email, reporter_phone, status, home_banner, category_banner, show_banner):
+def event(id, img, title, category, region, start_date, end_date, display_date, note, location, link, desc, reporter_name, reporter_email, reporter_phone, status, show_banner):
   structure = {
       "index": id,
       "img": img,
@@ -20,11 +20,7 @@ def event(id, img, title, category, region, start_date, end_date, display_date, 
           "phone": reporter_phone,
       },
       "status": status,
-      "banner": {
-          "home": home_banner,
-          "category": category_banner,
-          "show": show_banner
-      }
+      "show_banner": show_banner
   }
   return structure
 

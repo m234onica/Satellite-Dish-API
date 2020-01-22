@@ -14,9 +14,7 @@ CREATE TABLE events (
   reporter_email  VARCHAR(100)   NOT NULL,
   reporter_phone  VARCHAR(20),
   region          ENUM("north", "east", "west", "middle"),
-  home_banner     boolean                   DEFAULT 0,
-  category_banner boolean                   DEFAULT 0,
-  show_banner     boolean                   DEFAULT 0,
+  show_banner     ENUM("hide", "all", "home", "category"),
   status          boolean                   DEFAULT 0,
   created_at      TIMESTAMP     NOT NULL    DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY( id )
@@ -38,8 +36,7 @@ INSERT INTO events
   reporter_phone,
   region,
   status,
-  home_banner,
-  category_banner
+  show_banner
 )
 VALUES
 (
@@ -57,8 +54,7 @@ VALUES
   "0930330321",
   "north",
   1,
-  1,
-  0
+  "home"
 ),
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -75,8 +71,7 @@ VALUES
   "0930330321",
   "north",
   1,
-  0,
-  1
+  "category"
 ),
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -93,8 +88,7 @@ VALUES
   "0930330321",
   "north",
   1,
-  1,
-  1
+  "hide"
 ),
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -109,10 +103,9 @@ VALUES
   "投稿人姓名",
   "linroex@coder.tw",
   "0930330321",
-  "west",
+  "east",
   0,
-  1,
-  1
+  "home"
 ),
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -129,8 +122,7 @@ VALUES
   "0930330321",
   "middle",
   1,
-  1,
-  1
+  "home"
 ),
 (
   "https://satellite-l5yx88bg3.now.sh/fakePics/1.jpeg",
@@ -147,6 +139,5 @@ VALUES
   "0930330321",
   "middle",
   1,
-  1,
-  1
+  "all"
 );

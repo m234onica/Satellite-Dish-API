@@ -24,17 +24,20 @@ $('.event_detail_button').click(function() {
     $('#eventCategory').val(data[0].category)
     $('#eventRegion').val(data[0].region)
 
-    if (data[0].banner.home == true) {
-      $('#eventHomeBanner').attr('checked', true)
-    } else {
-      $('#eventHomeBanner').attr('checked', false)
-    }
     
-    if (data[0].banner.category == true) {
+    if (data[0].show_banner == "all") {
+      $('#eventHomeBanner').attr('checked', true)
       $('#eventCategoryBanner').attr('checked', true)
-    } else {
+      
+    }else if (data[0].show_banner == "home") {
+      $('#eventHomeBanner').attr('checked', true)
       $('#eventCategoryBanner').attr('checked', false)
-    }
+      
+    } else if (data[0].show_banner == "category") {
+      $('#eventHomeBanner').attr('checked', false)
+      $('#eventCategoryBanner').attr('checked', true)
+    } 
+    console.log(data[0]);
   })
 })
 
@@ -54,37 +57,29 @@ $('.accept_button').click(function () {
     'status': true,
     'region': $('#eventRegion').val(),
     'category': $('#eventCategory').val(),
-    'home_banner': false,
-    'category_banner': false,
-    'show_banner': false
-  }
-  
-  if ($("#eventHomeBanner").prop('checked')) {
-    Data.home_banner = true;
-    Data.show_banner = true;
-  } else {
-    Data.home_banner = false;
-  }
-  
-  if ($("#eventCategoryBanner").prop('checked')) {
-    Data.category_banner = true
-  } else {
-    Data.category_banner = false
+    'show_banner': "hide"
   }
 
-  if (Data.category_banner == true || Data.home_banner == true ){
-    Data.show_banner = true;
-  } else{
-    Data.show_banner = false;
-  }
+  var checkedHome = $("#eventHomeBanner").prop('checked')
+  var checkedCate = $("#eventCategoryBanner").prop('checked')
+
+  console.log(checkedHome, checkedCate);
   
-  form = JSON.stringify(Data)
+
+  if (checkedHome && !checkedCate) {
+    Data.show_banner = "home";
+  } else if (!checkedHome && checkedCate) {
+    Data.show_banner = "category"
+  } else if (checkedCate && checkedCate) {
+    Data.show_banner = "all"
+  } 
+  
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
-    data: form,
+    data: JSON.stringify(Data),
   }).done(function (data) {
     window.location.reload()    
   })
@@ -93,7 +88,7 @@ $('.accept_button').click(function () {
 //update event data and reject it
 $('.reject_button').click(function () {
   var eventId = $("#eventIndex").val();
-  let Data = {
+  var Data = {
     'link': $('#eventLink').val(),
     'desc': $('#eventDesc').val(),
     'title': $('#eventTitle').val(),
@@ -102,21 +97,18 @@ $('.reject_button').click(function () {
     'display_date': $('#eventDisplay').val(),
     'note': $('#eventNote').val(),
     'location': $('#eventAddress').val(),
-    'status': false,
     'region': $('#eventRegion').val(),
     'category': $('#eventCategory').val(),
-    'home_banner': false,
-    'category_banner': false,
-    'show_banner': false
+    'status': false,
+    'show_banner': "hide"
   }
-  form = JSON.stringify(Data)
 
   $.ajax({
-    type: "PUT",
+    type: "POST",
     url: "api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
-    data: form,
+    data: JSON.stringify(Data)
   }).done(function(data) {
     window.location.reload()
   })

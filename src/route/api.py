@@ -7,7 +7,7 @@ from enum import Enum
 from src import db
 from src.tools.data import data
 from src.tools.storage import decode_and_get_url
-from src.models.model import Event, category_Enum
+from src.models.model import Event, category_Enum, banner_Enum, region_Enum
 from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
 
 
@@ -75,7 +75,7 @@ def get_banner(category):
 
 
 #update event
-@api.route('/api/event/<int:id>', methods=['GET', 'PUT'])
+@api.route('/api/event/<int:id>', methods=['GET', 'POST'])
 def each_event(id):
   event = Event.query.filter_by(id=id).first()
 
@@ -86,7 +86,7 @@ def each_event(id):
     result = data('event', event)
     return jsonify(result)
 
-  if request.method == 'PUT':
+  if request.method == 'POST':
     event.title=request.json['title']
     event.category=request.json['category']
     event.link=request.json['link']
@@ -98,8 +98,6 @@ def each_event(id):
     event.location = request.json['location']
     event.note=request.json['note']
     event.status = request.json['status']
-    event.home_banner = request.json['home_banner']
-    event.category_banner = request.json['category_banner']
     event.show_banner = request.json['show_banner']
 
     db.session.commit()
@@ -111,12 +109,12 @@ def create_event():
   if request.method == 'POST':
     new_event = Event(
       title=request.json['title'],
-      category=request.json['category'],
+      category=category_Enum(request.json['category']),
       img="",
       link=request.json['link'],
       created_at=datetime.now(),
       description=request.json['desc'], 
-      region=request.json['region'],
+      region=region_Enum(0),
       start_date=request.json['date']['start'],
       end_date=request.json['date']['end'],
       display_date=request.json['display_date'],
@@ -126,9 +124,7 @@ def create_event():
       reporter_email=request.json['reporter']['email'],
       reporter_phone=request.json['reporter']['phone'],
       status=None,
-      home_banner=False,
-      category_banner=False,
-      show_banner=False
+      show_banner=banner_Enum(0)
       )
     
     db.session.add(new_event)

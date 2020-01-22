@@ -5,11 +5,14 @@ def data(data_type, all_data):
 
   if data_type == "event":
     each_event_category = all_data.category
+    each_event_banner = all_data.show_banner
+    each_event_region = all_data.region
+
     result.append(event(all_data.id,
                         all_data.img,
                         all_data.title,
                         each_event_category.name,
-                        all_data.region,
+                        each_event_region.name,
                         all_data.start_date.strftime("%Y-%m-%d"),
                         all_data.end_date.strftime("%Y-%m-%d"),
                         all_data.display_date,
@@ -21,20 +24,21 @@ def data(data_type, all_data):
                         all_data.reporter_email,
                         all_data.reporter_phone,
                         all_data.status,
-                        all_data.home_banner,
-                        all_data.category_banner,
-                        all_data.show_banner
+                        each_event_banner.name
                         )
                   )
 
   elif data_type == 'events':
     for each_data in all_data:
       each_event_category = each_data.category
+      each_event_banner = each_data.show_banner
+      each_event_region = each_data.region
+
       result.append(event(each_data.id,
                         each_data.img,
                         each_data.title,
                         each_event_category.name,
-                        each_data.region,
+                        each_event_region.name,
                         each_data.start_date.strftime("%Y-%m-%d"),
                         each_data.end_date.strftime("%Y-%m-%d"),
                         each_data.display_date,
@@ -46,17 +50,18 @@ def data(data_type, all_data):
                         each_data.reporter_email,
                         each_data.reporter_phone,
                         each_data.status,
-                        each_data.home_banner,
-                        each_data.category_banner,
-                        each_data.show_banner
+                        each_event_banner.name
                         )
                     )
 
   elif data_type == "filter_events":
     for each_data in all_data:
+      each_event_banner = each_data.show_banner
+      each_event_region = each_data.region
+
       result.append(filter_events(each_data.img,
                         each_data.title,
-                        each_data.region,
+                        each_event_region.name,
                         each_data.start_date.strftime("%Y-%m-%d"),
                         each_data.end_date.strftime("%Y-%m-%d"),
                         each_data.display_date,

@@ -33,6 +33,7 @@ def events():
   pagination = Event.query.order_by(Event.start_date.asc()).\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_events = pagination.items
+
   return render_template("event.html",
                         result=data('events', all_events),
                         pagination=pagination)
@@ -41,9 +42,11 @@ def events():
 @cms.route('/banner')
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(show_banner=1).order_by(Event.id).\
+  pagination = Event.query.filter_by(status=1).\
+      filter(Event.show_banner != "hide").\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   all_banners = pagination.items
+
   return render_template("banners/all.html",
                          result=data('banners', all_banners),
                          pagination=pagination)
@@ -52,9 +55,11 @@ def get_all_banner():
 @cms.route('/home_banner', methods=['GET'])
 def home_banner():
   page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).filter_by(home_banner=1).order_by(Event.id).\
+  pagination = Event.query.filter_by(status=1).\
+      filter(Event.show_banner!="hide").filter(Event.show_banner!="category").\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   home_banners = pagination.items
+
   return render_template("banners/home.html",
                          result=data('banners', home_banners),
                          pagination=pagination)
@@ -66,8 +71,8 @@ def category_banner(category):
     return 'Category is not found.', 400
 
   page = request.args.get('page', 1, type=int)
-  pagination = Event.query.filter_by(status=1).\
-      filter_by(category_banner=1).filter_by(category=category).order_by(Event.id).\
+  pagination = Event.query.filter_by(status=1).filter_by(category=category).\
+      filter(Event.show_banner != "home").filter(Event.show_banner != "hide").\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   category_banners = pagination.items
 
