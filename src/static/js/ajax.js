@@ -37,7 +37,6 @@ $('.event_detail_button').click(function() {
       $('#eventHomeBanner').attr('checked', false)
       $('#eventCategoryBanner').attr('checked', true)
     } 
-    console.log(data[0]);
   })
 })
 
@@ -47,7 +46,7 @@ $('.accept_button').click(function () {
   var eventId = $("#eventIndex").val();
   var Data = {
     'link': $('#eventLink').val(),
-    'desc': $('#eventDesc').val(),
+    'description': $('#eventDesc').val(),
     'title': $('#eventTitle').val(),
     'start_date': $('#eventStart').val(),
     'end_date': $('#eventEnd').val(),
@@ -62,8 +61,6 @@ $('.accept_button').click(function () {
 
   var checkedHome = $("#eventHomeBanner").prop('checked')
   var checkedCate = $("#eventCategoryBanner").prop('checked')
-
-  console.log(checkedHome, checkedCate);
   
 
   if (checkedHome && !checkedCate) {
@@ -90,7 +87,7 @@ $('.reject_button').click(function () {
   var eventId = $("#eventIndex").val();
   var Data = {
     'link': $('#eventLink').val(),
-    'desc': $('#eventDesc').val(),
+    'description': $('#eventDesc').val(),
     'title': $('#eventTitle').val(),
     'start_date': $('#eventStart').val(),
     'end_date': $('#eventEnd').val(),

@@ -1,4 +1,4 @@
-def event(id, img, title, category, region, start_date, end_date, display_date, note, location, link, desc, reporter_name, reporter_email, reporter_phone, status, show_banner):
+def event(id, img, title, category, region, start_date, end_date, display_date, note, location, link, description, reporter_name, reporter_email, reporter_phone, status, show_banner):
   structure = {
       "index": id,
       "img": img,
@@ -13,7 +13,7 @@ def event(id, img, title, category, region, start_date, end_date, display_date, 
       "note": note,
       "address": location,
       "link": link,
-      "desc": desc,
+      "description": description,
       "reporter": {
           "name": reporter_name,
           "email": reporter_email,
@@ -25,7 +25,7 @@ def event(id, img, title, category, region, start_date, end_date, display_date, 
   return structure
 
 
-def filter_events(img, title, region, start_date, end_date, display_date, location, link, desc):
+def filter_events(img, title, region, start_date, end_date, display_date, location, link, description):
   structure = {
     "img": img,
     "title": title,
@@ -37,17 +37,18 @@ def filter_events(img, title, region, start_date, end_date, display_date, locati
     "display_date": display_date,
     "address": location,
     "link": link,
-    "desc": desc
+    "description": description
   }
   return structure
 
-def banner(id, img, title, display_date, location, desc):
+
+def banner(id, img, title, display_date, location, description):
   structure = {
       "index": id,
       "img": img,
       "title": title,
       "display_date": display_date,
       "address": location,
-      "desc": desc
+      "description": description
   }
   return structure

@@ -90,7 +90,7 @@ def each_event(id):
     event.title=request.json['title']
     event.category=request.json['category']
     event.link=request.json['link']
-    event.description = request.json['desc']
+    event.description = request.json['description']
     event.region = request.json['region']
     event.start_date = request.json['start_date']
     event.end_date = request.json['end_date']
@@ -113,7 +113,7 @@ def create_event():
       img="",
       link=request.json['link'],
       created_at=datetime.now(),
-      description=request.json['desc'], 
+      description=request.json['description'],
       region=region_Enum(0),
       start_date=request.json['date']['start'],
       end_date=request.json['date']['end'],
