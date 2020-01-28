@@ -16,3 +16,4 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:rootroot@localhost/SatelliteDish
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 JSON_AS_ASCII = False
 
+BASE_URL = ''
