@@ -23,10 +23,9 @@ def url():
 def before_req():
   g.url = BASE_URL
 
-@cms.route('/')
-def index():
-  return redirect(url_for('cms.events'))
 
+@cms.route('/')
+@cms.route('/event/')
 @cms.route('/event', methods=['GET'])
 def events():
   page = request.args.get('page', 1, type=int)
@@ -35,11 +34,12 @@ def events():
   all_events = pagination.items
 
   return render_template("event.html",
-                        result=data('events', all_events),
-                        pagination=pagination)
+                         result=data('events', all_events),
+                         pagination=pagination)
 
 
-@cms.route('/banner')
+@cms.route('/banner/')
+@cms.route('/banner', methods=['GET'])
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
   pagination = Event.query.filter_by(status=1).\
@@ -52,11 +52,12 @@ def get_all_banner():
                          pagination=pagination)
 
 
+@cms.route('/home_banner/')
 @cms.route('/home_banner', methods=['GET'])
 def home_banner():
   page = request.args.get('page', 1, type=int)
   pagination = Event.query.filter_by(status=1).\
-      filter(Event.show_banner!="hide").filter(Event.show_banner!="category").\
+      filter(Event.show_banner != "hide").filter(Event.show_banner != "category").\
       paginate(page, per_page=PER_PAGE, error_out=True, max_per_page=None)
   home_banners = pagination.items
 
@@ -65,6 +66,7 @@ def home_banner():
                          pagination=pagination)
 
 
+@cms.route('/category_banner/<category>/')
 @cms.route('/category_banner/<category>', methods=['GET'])
 def category_banner(category):
   if category not in CATEGORY_DB:
