@@ -16,7 +16,8 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/banner', methods=['GET'])
 def banner():
-  all_banners = Event.query.filter_by(show_banner=1).all()
+  all_banners = Event.query.filter_by(status=1).\
+      filter(Event.show_banner != "hide").all()
   result = data('banners', all_banners)
   return jsonify(result)
 
