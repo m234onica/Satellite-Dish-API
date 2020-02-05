@@ -16,7 +16,7 @@ cms = Blueprint('cms', __name__)
 
 @cms.context_processor
 def url():
-  return {'url': g.url}
+  return {'base_url': g.url}
 
 
 @cms.before_request
@@ -24,8 +24,6 @@ def before_req():
   g.url = BASE_URL
 
 
-@cms.route('/')
-@cms.route('/event/')
 @cms.route('/event', methods=['GET'])
 def events():
   page = request.args.get('page', 1, type=int)
@@ -38,7 +36,6 @@ def events():
                          pagination=pagination)
 
 
-@cms.route('/banner/')
 @cms.route('/banner', methods=['GET'])
 def get_all_banner():
   page = request.args.get('page', 1, type=int)
@@ -52,7 +49,6 @@ def get_all_banner():
                          pagination=pagination)
 
 
-@cms.route('/home_banner/')
 @cms.route('/home_banner', methods=['GET'])
 def home_banner():
   page = request.args.get('page', 1, type=int)
@@ -66,7 +62,6 @@ def home_banner():
                          pagination=pagination)
 
 
-@cms.route('/category_banner/<category>/')
 @cms.route('/category_banner/<category>', methods=['GET'])
 def category_banner(category):
   if category not in CATEGORY_DB:

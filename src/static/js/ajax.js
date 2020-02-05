@@ -4,7 +4,7 @@ $('.event_detail_button').click(function() {
   
   $.ajax({
     type: "GET",
-    url: "api/event/" + eventId,
+    url: BASEURL + "/api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
   }).done(function (data) {
@@ -46,7 +46,7 @@ $('.accept_button').click(function () {
   var eventId = $("#eventIndex").val();
   var Data = {
     'link': $('#eventLink').val(),
-    'description': $('#eventDesc').val(),
+    'desc': $('#eventDesc').val(),
     'title': $('#eventTitle').val(),
     'start_date': $('#eventStart').val(),
     'end_date': $('#eventEnd').val(),
@@ -73,7 +73,7 @@ $('.accept_button').click(function () {
   
   $.ajax({
     type: "POST",
-    url: "api/event/" + eventId,
+    url: BASEURL + "/api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
     data: JSON.stringify(Data),
@@ -87,7 +87,7 @@ $('.reject_button').click(function () {
   var eventId = $("#eventIndex").val();
   var Data = {
     'link': $('#eventLink').val(),
-    'description': $('#eventDesc').val(),
+    'desc': $('#eventDesc').val(),
     'title': $('#eventTitle').val(),
     'start_date': $('#eventStart').val(),
     'end_date': $('#eventEnd').val(),
@@ -102,7 +102,7 @@ $('.reject_button').click(function () {
 
   $.ajax({
     type: "POST",
-    url: "api/event/" + eventId,
+    url: BASEURL + "/api/event/" + eventId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
     data: JSON.stringify(Data)
@@ -117,7 +117,7 @@ $('.banner_image_button').click(function() {
   
   $.ajax({
     type: "GET",
-    url: "api/event/" + imageId,
+    url: BASEURL + "/api/event/" + imageId,
     dataType: 'json',
     contentType: 'application/json; charset=utf-8',
   }).done(function (data) {

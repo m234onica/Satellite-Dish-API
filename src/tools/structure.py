@@ -13,7 +13,7 @@ def event(id, img, title, category, region, start_date, end_date, display_date, 
       "note": note,
       "address": location,
       "link": link,
-      "description": description,
+      "desc": description,
       "reporter": {
           "name": reporter_name,
           "email": reporter_email,
@@ -37,7 +37,7 @@ def filter_events(img, title, region, start_date, end_date, display_date, locati
     "display_date": display_date,
     "address": location,
     "link": link,
-    "description": description
+    "desc": description
   }
   return structure
 
@@ -49,6 +49,6 @@ def banner(id, img, title, display_date, location, description):
       "title": title,
       "display_date": display_date,
       "address": location,
-      "description": description
+      "desc": description
   }
   return structure
