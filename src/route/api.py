@@ -107,36 +107,40 @@ def each_event(id):
 #create event
 @api.route('/api/event', methods=['GET', 'POST'])
 def create_event():
+  data = request.get_json()
   if request.method == 'POST':
-    new_event = Event(
-      title=request.json['title'],
-      category=category_Enum(request.json['category']),
-      img="",
-      link=request.json['link'],
-      created_at=datetime.now(),
-      description=request.json['desc'],
-      region=region_Enum(0),
-      start_date=request.json['date']['start'],
-      end_date=request.json['date']['end'],
-      display_date=request.json['display_date'],
-      location=request.json['location'],
-      note=request.json['note'],
-      reporter_name=request.json['reporter']['name'],
-      reporter_email=request.json['reporter']['email'],
-      reporter_phone=request.json['reporter']['phone'],
-      status=None,
-      show_banner=banner_Enum(0)
-      )
+    if 'img' not in data:
+      return 'no img'
+    else:
+      new_event = Event(
+        title=request.json['title'],
+        category=category_Enum(request.json['category']),
+        img="",
+        link=request.json['link'],
+        created_at=datetime.now(),
+        description=request.json['desc'],
+        region=region_Enum(0),
+        start_date=request.json['date']['start'],
+        end_date=request.json['date']['end'],
+        display_date=request.json['display_date'],
+        location=request.json['location'],
+        note=request.json['note'],
+        reporter_name=request.json['reporter']['name'],
+        reporter_email=request.json['reporter']['email'],
+        reporter_phone=request.json['reporter']['phone'],
+        status=None,
+        show_banner=banner_Enum(0)
+        )
 
-    db.session.add(new_event)
-    db.session.commit()
-    
-    if new_event.img == "":
-      new_event = Event.query.filter_by(id=new_event.id).first()
-      new_event.img = decode_and_get_url(
-          request.json['img'], new_event.id)
+      db.session.add(new_event)
       db.session.commit()
-    return 'Saved to the database!'
+      
+      if new_event.img == "":
+        new_event = Event.query.filter_by(id=new_event.id).first()
+        new_event.img = decode_and_get_url(
+            request.json['img'], new_event.id)
+        db.session.commit()
+      return 'Saved to the database!'
 
   if request.method == 'GET':
     all_events = Event.query.all()
