@@ -17,3 +17,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = True
 JSON_AS_ASCII = False
 
 BASE_URL = ''
+if BASE_URL.endswith(os.path.sep):
+  BASE_URL = BASE_URL[:-1]
