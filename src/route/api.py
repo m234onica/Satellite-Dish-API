@@ -105,13 +105,19 @@ def each_event(id):
     return jsonify({'result': 'success', 'event_index': event.id})
 
 #create event
-@api.route('/api/event', methods=['GET', 'POST'])
+@api.route('/api/event', methods=['POST'])
 def create_event():
   data = request.get_json()
-  if request.method == 'POST':
-    if 'img' not in data:
-      return 'no img'
-    else:
+  event = Event.query.order_by(Event.id.desc()).first()
+
+  if 'img' not in data.keys():
+    return 'Image is not found.', 400
+
+  else:
+    new_event_id = event.id + 1
+    image = decode_and_get_url(request.json['img'], new_event_id)
+
+    if image != False:
       new_event = Event(
         title=request.json['title'],
         category=category_Enum(request.json['category']),
@@ -137,12 +143,16 @@ def create_event():
       
       if new_event.img == "":
         new_event = Event.query.filter_by(id=new_event.id).first()
-        new_event.img = decode_and_get_url(
-            request.json['img'], new_event.id)
+        new_event.img = image
         db.session.commit()
-      return 'Saved to the database!'
+        return 'Saved to the database!'
+        
+    else:
+        return 'Image type is not correct.', 400
 
-  if request.method == 'GET':
-    all_events = Event.query.all()
-    result = data('events', all_events)
-    return jsonify(result)      
+
+@api.route('/api/event', methods=['GET'])
+def show_event():
+  all_events = Event.query.all()
+  result = data('events', all_events)
+  return jsonify(result)      
