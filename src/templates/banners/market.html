@@ -5,7 +5,7 @@
 <h1>Market Banner List</h1>
 <div>
   {%import 'page.html' as pg%}
-  {{pg.my_paginate(pagination,'cms.category_banner', 'market')}}
+  {{pg.my_paginate(pagination, base_url+'/category_banner/market')}}
 </div>
 {% include 'banners/base.html' %}
 {% endblock banner_body %}
