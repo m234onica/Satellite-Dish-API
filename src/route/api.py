@@ -28,8 +28,9 @@ def get_category_banner(category):
   if category not in CATEGORY_DB:
     return 'Category is not found.', 400
 
-  category_banners = Event.query.filter_by(
-      status=1).filter_by(category_banner=1).filter_by(category=category).all()
+  category_banners = Event.query.filter_by(status=1).\
+      filter(Event.show_banner != "home").filter(Event.show_banner != "hide").\
+      filter_by(category=category).all()
   result = data('banners', category_banners)
   return jsonify(result)
 
