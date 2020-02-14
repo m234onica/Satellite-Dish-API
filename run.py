@@ -1,6 +1,7 @@
 from flask import g
 from src import create_app
-app = create_app()
+app = create_app("local")
+# app = create_app("ngrok")
 BASE_URL = app.config.get('BASE_URL')
 
 @app.context_processor
