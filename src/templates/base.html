@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-  <link type="text/css" rel="stylesheet" href="{{url}}/static/css/event.css">
-  <link rel="shortcut icon" href="{{url}}/static/css/favicon.ico">
+  <link type="text/css" rel="stylesheet" href="{{base_url}}/static/css/event.css">
+  <link rel="shortcut icon" href="{{base_url}}/static/css/favicon.ico">
 </head>
 
 <body>
@@ -25,25 +25,25 @@
 
           <h2 class="nav-item" style="padding-top: 10%; padding-bottom: 25%;">Satellite Dish</h2>
 
-          <a href="{{url}}/event" id="v-pills-event"
+          <a href="{{base_url}}/event" id="v-pills-event"
             class="nav-link {{ 'customized_active' if active_page == 'event' else '' }}"
             style="font-size:1.2em">Event</a>
-          <a href="{{url}}/banner" id="v-pills-banner"
+          <a href="{{base_url}}/banner" id="v-pills-banner"
             class="nav-link {{ 'customized_active' if active_page == 'all' else '' }}"
             style="font-size:1.2em">Banner&nbsp;<i class='fas fa-angle-down'></i></a>
-          <a href="{{url}}/home_banner" id="v-pills-home"
+          <a href="{{base_url}}/home_banner" id="v-pills-home"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'home' else '' }}">
             Home</a>
-          <a href="{{url}}/category_banner/music" id="v-pills-music"
+          <a href="{{base_url}}/category_banner/music" id="v-pills-music"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'music' else '' }}">
             Music</a>
-          <a href="{{url}}/category_banner/visual_art" id="v-pills-visual-art"
+          <a href="{{base_url}}/category_banner/visual_art" id="v-pills-visual-art"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'visual_art' else '' }}">
             Visual Art</a>
-          <a href="{{url}}/category_banner/market" id="v-pills-market"
+          <a href="{{base_url}}/category_banner/market" id="v-pills-market"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'market' else '' }}">
             Market</a>
-          <a href="{{url}}/category_banner/theatre" id="v-pills-theatre"
+          <a href="{{base_url}}/category_banner/theatre" id="v-pills-theatre"
             class="nav-link sidebar_position {{ 'customized_active' if active_page == 'theatre' else '' }}">
             Theatre</a>
         </nav>
@@ -60,6 +60,7 @@
       </div>
     </div>
   </div>
+  
 </body>
 
 </html>

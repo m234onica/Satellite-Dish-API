@@ -83,10 +83,11 @@ def each_event(id):
     return jsonify(result)
 
   if request.method == 'POST':
+
     event.title = request.json['title']
     event.category = request.json['category']
     event.link = request.json['link']
-    event.description = request.json['description']
+    event.description = request.json['desc']
     event.region = request.json['region']
     event.start_date = request.json['start_date']
     event.end_date = request.json['end_date']
@@ -100,16 +101,27 @@ def each_event(id):
     return jsonify({'result': 'success', 'event_index': event.id})
 
 #create event
-@api.route('/api/event', methods=['GET', 'POST'])
+@api.route('/api/event', methods=['POST'])
 def create_event():
-  if request.method == 'POST':
-    new_event = Event(
+
+  data = request.get_json()
+  event = Event.query.order_by(Event.id.desc()).first()
+
+  if 'img' not in data.keys():
+    return 'Image is not found.', 400
+
+  else:
+    new_event_id = event.id + 1
+    image = decode_and_get_url(request.json['img'], new_event_id)
+
+    if image != False:
+      new_event = Event(
         title=request.json['title'],
         category=category_Enum(request.json['category']),
         img="",
         link=request.json['link'],
         created_at=datetime.now(),
-        description=request.json['description'],
+        description=request.json['desc'],
         region=region_Enum(0),
         start_date=request.json['date']['start'],
         end_date=request.json['date']['end'],
@@ -121,19 +133,24 @@ def create_event():
         reporter_phone=request.json['reporter']['phone'],
         status=None,
         show_banner=banner_Enum(0)
-    )
 
-    db.session.add(new_event)
-    db.session.commit()
+        )
 
-    if new_event.img == "":
-      new_event = Event.query.filter_by(id=new_event.id).first()
-      new_event.img = decode_and_get_url(
-          request.json['img'], new_event.id)
+      db.session.add(new_event)
       db.session.commit()
-    return 'Saved to the database!'
+      
+      if new_event.img == "":
+        new_event = Event.query.filter_by(id=new_event.id).first()
+        new_event.img = image
+        db.session.commit()
+        return 'Saved to the database!'
+        
+    else:
+        return 'Image type is not correct.', 400
 
-  if request.method == 'GET':
-    all_events = Event.query.all()
-    result = data('events', all_events)
-    return jsonify(result)
+
+@api.route('/api/event', methods=['GET'])
+def show_event():
+  all_events = Event.query.all()
+  result = data('events', all_events)
+  return jsonify(result)      

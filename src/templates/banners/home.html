@@ -4,7 +4,7 @@
 <h1>Home Banner List</h1>
 <div>
   {%import 'page.html' as pg%}
-  {{pg.my_paginate(pagination,'cms.home_banner', 'null')}}
+  {{pg.my_paginate(pagination, base_url+'/home_banner')}}
 </div>
 {% include 'banners/base.html' %}
 {% endblock banner_body %}
