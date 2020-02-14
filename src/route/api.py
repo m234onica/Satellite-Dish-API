@@ -111,7 +111,11 @@ def create_event():
     return 'Image is not found.', 400
 
   else:
-    new_event_id = event.id + 1
+    if event == None:
+      new_event_id = 1
+    else: 
+      new_event_id = event.id + 1
+
     image = decode_and_get_url(request.json['img'], new_event_id)
 
     if image != False:
