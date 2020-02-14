@@ -8,20 +8,11 @@ from src import db
 from src.tools.data import data
 from src.tools.storage import decode_and_get_url
 from src.models.model import Event, category_Enum, db
-from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE, BASE_URL
+from config import CATEGORY_DB, ALLOWED_EXTENSIONS, PER_PAGE
 
 
 cms = Blueprint('cms', __name__)
 
-
-@cms.context_processor
-def url():
-  return {'base_url': g.url}
-
-
-@cms.before_request
-def before_req():
-  g.url = BASE_URL
 
 
 @cms.route('/event', methods=['GET'])
