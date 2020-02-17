@@ -71,34 +71,36 @@ def get_banner(category):
 
 
 #update event
-@api.route('/api/event/<int:id>', methods=['GET', 'POST'])
+@api.route('/api/event/<int:id>', methods=['GET'])
 def each_event(id):
   event = Event.query.filter_by(id=id).first()
 
-  if request.method == 'GET':
-    if event == None:
-      return {}
+  if event == None:
+    return {}
 
-    result = data('event', event)
-    return jsonify(result)
+  result = data('event', event)
+  return jsonify(result)
 
-  if request.method == 'POST':
 
-    event.title = request.json['title']
-    event.category = request.json['category']
-    event.link = request.json['link']
-    event.description = request.json['desc']
-    event.region = request.json['region']
-    event.start_date = request.json['start_date']
-    event.end_date = request.json['end_date']
-    event.display_date = request.json['display_date']
-    event.location = request.json['location']
-    event.note = request.json['note']
-    event.status = request.json['status']
-    event.show_banner = request.json['show_banner']
+@api.route('/api/event/<int:id>', methods=['POST'])
+def update_event(id):
+  event = Event.query.filter_by(id=id).first()
+  
+  event.title = request.json['title']
+  event.category = request.json['category']
+  event.link = request.json['link']
+  event.description = request.json['desc']
+  event.region = request.json['region']
+  event.start_date = request.json['start_date']
+  event.end_date = request.json['end_date']
+  event.display_date = request.json['display_date']
+  event.location = request.json['location']
+  event.note = request.json['note']
+  event.status = request.json['status']
+  event.show_banner = request.json['show_banner']
 
-    db.session.commit()
-    return jsonify({'result': 'success', 'event_index': event.id})
+  db.session.commit()
+  return jsonify({'result': 'success', 'event_index': event.id})
 
 #create event
 @api.route('/api/event', methods=['POST'])
@@ -111,7 +113,11 @@ def create_event():
     return 'Image is not found.', 400
 
   else:
-    new_event_id = event.id + 1
+    if event == None:
+      new_event_id = 1
+    else: 
+      new_event_id = event.id + 1
+
     image = decode_and_get_url(request.json['img'], new_event_id)
 
     if image != False:

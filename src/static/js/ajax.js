@@ -16,7 +16,7 @@ $('.event_detail_button').click(function () {
     $('#eventDisplay').val(data[0].display_date)
     $('#eventNote').val(data[0].note)
     $('#eventAddress').val(data[0].address)
-    $('#eventDesc').val(data[0].description)
+    $('#eventDesc').val(data[0].desc)
     $('#eventReporterName').val(data[0].reporter.name)
     $('#eventReporterEmail').val(data[0].reporter.email)
     $('#eventReporterPhone').val(data[0].reporter.phone)

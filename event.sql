@@ -13,7 +13,7 @@ CREATE TABLE events (
   reporter_name   VARCHAR(20)   NOT NULL,
   reporter_email  VARCHAR(100)   NOT NULL,
   reporter_phone  VARCHAR(20),
-  region          ENUM("north", "east", "west", "middle"),
+  region          ENUM("empty", "north", "east", "west", "middle"),
   show_banner     ENUM("hide", "all", "home", "category"),
   status          boolean                   DEFAULT 0,
   created_at      TIMESTAMP     NOT NULL    DEFAULT CURRENT_TIMESTAMP(),
